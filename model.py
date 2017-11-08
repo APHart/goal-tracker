@@ -55,14 +55,13 @@ class User(db.Model):
 
 
 class Goal(db.Model):
-    """Goals entered by user on goal tracking website"""
+    """Goals entered by user."""
 
     __tablename__ = "goals"
 
     goal_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=True)
-    repeat = db.Column(db.Boolean, default=False)
     type_id = db.Column(db.String(1),
                         db.ForeignKey('types.type_id'),
                         nullable=False)
@@ -70,7 +69,7 @@ class Goal(db.Model):
     # Define relationship to type
     goal_type = db.relationship("Type",
                                 backref=db.backref("goals",
-                                order_by=type_id, goal_id))
+                                order_by=type_id))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -82,7 +81,7 @@ class Goal(db.Model):
 
 
 class Track(db.Model):
-    """Tracks/completions of user goals on goal tracking website."""
+    """Tracks/instances of user goals."""
 
     __tablename__ = "tracks"
 
@@ -92,8 +91,12 @@ class Track(db.Model):
                         nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
+    repeat = db.Column(db.Boolean, default=False)
     num_times = db.Column(db.Int, nullable=False)
-    num_comp = db.Column(db.Integer, default=0, nullable=False)
+
+    #DATES: may want to store as DATERANGE data type rather than separate 
+    #start/end. May also need to have convo with Katie if dates stored to not
+    #jsonify
 
     # Define relationship to user
     user = db.relationship("User",
@@ -112,8 +115,23 @@ class Track(db.Model):
             self.track_id, self.goal_id, self.num_comp)
 
 
+class Completion(db.Model):
+  """Completion information for track of user goal."""
+
+  __tablename__ = 'completions'
+
+  comp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+  track_id = db.Column(db.Integer, 
+                       db.ForeignKey('tracks.track_id'), 
+                       nullable=False)
+  comp_week = db.Column(db.Integer, nullable=False)
+  comp_day = db.Column(db.String(3), nullable=False)
+  comp_location = db.Column(db.String(50))
+  comp_notes = db.Column(db.String(150))
+
+
 class Type(db.Model):
-    """Goal types on goal tracking website"""
+    """Goal types."""
 
     __tablename__ = "types"
 
@@ -132,14 +150,14 @@ class High_Five(db.Model):
     __tablename__ = "high_fives"
 
     hfive_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    track_id = db.Column(db.Integer, db.ForeignKey('tracks.track_id'))
+    comp_id = db.Column(db.Integer, db.ForeignKey('completions.comp_id'))
     hfiver_id = db.Column(db.Integer,
                           db.ForeignKey('user.user_id'),
                           nullable=False)
     hfive_date = db.Column(db.DateTime, nullable=False)
 
     # Define relationship to track
-    track = db.relationship("Track",
+    track = db.relationship("Completion",
                             backref=db.backref("high_fives",
                                                order_by=track_id))
 
@@ -214,8 +232,8 @@ def example_data():
     u1 = User(user_id=123,
               email='test@test.com',
               password='Password',
-              f_name='Bob'
-              l_name='Smith'
+              f_name='Bob',
+              l_name='Smith',
               phone=4151234321,
               birth_date='1982-01-01 00:00:00')
 
@@ -228,22 +246,24 @@ def example_data():
               birth_date='1982-01-31 00:00:00')
 
     g1 = Goal(goal_id=1,
-              name='Hit the Gym!'
-              date_created=date.fromtimestamp(timestamp)
-    repeat = db.Column(db.Boolean, default=False)
-    type_id =
+              user_id=123,
+              name='Hit the Gym!',
+              date_created=date.fromtimestamp(timestamp),
+              repeat=False,
+              type_id='P')
 
-    m2 = Movie(movie_id=2,
-               title='Raspberry Rampage',
-               released_at='1994-01-01 00:00:00',
-               imdb_url='http://www.imbd/raspramp.com')
+    g2 = Goal(goal_id=2,
+              user_id=321,
+              name='Eat fewer cheeseburgers.',
+              date_created=date.fromtimestamp(timestamp),
+              repeat=False,
+              type_id='L')
 
-    r1 = Rating(rating_id=1, movie_id=1, user_id=666, score=4)
-    r2 = Rating(rating_id=2, movie_id=2, user_id=666, score=1)
-    r3 = Rating(rating_id=3, movie_id=1, user_id=420, score=5)
-    r4 = Rating(rating_id=4, movie_id=2, user_id=420, score=3)
+    typ1 = Type(type_id='P', type_name='Push')
+    typ2 = Type(type_id='L', type_name='Limit')
+    typ3 = Type(type_id='H', type_name='Head-2-heaD')
 
-    db.session.add_all([u1, u2, m1, m2, r1, r2, r3, r4])
+    db.session.add_all([u1, u2, g1, g2, typ1, typ2, typ3])
     db.session.commit()
 
 
