@@ -1,7 +1,6 @@
 """Models and database functions for my project."""
 
 from flask_sqlalchemy import SQLAlchemy
-from correlation import pearson
 from datetime import datetime
 from datetime import date
 
@@ -12,7 +11,7 @@ db = SQLAlchemy()
 # Model definitions
 
 class User(db.Model):
-    """User of goal tracking website."""
+    """User of/on goal tracking website."""
 
     __tablename__ = "users"
 
@@ -62,9 +61,7 @@ class Goal(db.Model):
     goal_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=True)
-    type_id = db.Column(db.String(1),
-                        db.ForeignKey('types.type_id'),
-                        nullable=False)
+    type_id = db.Column(db.String(1), db.ForeignKey('types.type_id'))
     
     # Define relationship to type
     goal_type = db.relationship("Type",
@@ -86,9 +83,7 @@ class Track(db.Model):
     __tablename__ = "tracks"
 
     track_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    goal_id = db.Column(db.Integer,
-                        db.ForeignKey('goals.goal_id'),
-                        nullable=False)
+    goal_id = db.Column(db.Integer, db.ForeignKey('goals.goal_id'))
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     repeat = db.Column(db.Boolean, default=False)
@@ -121,9 +116,7 @@ class Completion(db.Model):
   __tablename__ = 'completions'
 
   comp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-  track_id = db.Column(db.Integer, 
-                       db.ForeignKey('tracks.track_id'), 
-                       nullable=False)
+  track_id = db.Column(db.Integer, db.ForeignKey('tracks.track_id'))
   comp_week = db.Column(db.Integer, nullable=False)
   comp_day = db.Column(db.String(3), nullable=False)
   comp_location = db.Column(db.String(50))
@@ -151,9 +144,7 @@ class High_Five(db.Model):
 
     hfive_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     comp_id = db.Column(db.Integer, db.ForeignKey('completions.comp_id'))
-    hfiver_id = db.Column(db.Integer,
-                          db.ForeignKey('user.user_id'),
-                          nullable=False)
+    hfiver_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     hfive_date = db.Column(db.DateTime, nullable=False)
 
     # Define relationship to track
