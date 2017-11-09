@@ -1,8 +1,12 @@
 """Models and database functions for my project."""
-
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from psycopg2.extras import DateTimeRange
 from datetime import datetime
-from datetime import date
+from sqlalchemy_utils import DateRangeType
+# from sqlalchemy.dialects.postgresql import DATERANGE
+from sqlalchemy.dialects.postgresql import DATE
+from sqlalchemy.dialects.postgresql import TIME
 
 db = SQLAlchemy()
 
@@ -11,17 +15,17 @@ db = SQLAlchemy()
 # Model definitions
 
 class User(db.Model):
-    """User of/on goal tracking website."""
+    """User on goal tracking website."""
 
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(75), nullable=False)
     password = db.Column(db.String(20), nullable=False)
-    f_name = db.Column(db.String(30), nullable=False)
-    l_name = db.Column(db.String(30), nullable=False)
-    phone = db.Column(db.Int, nullable=True)
-    birth_date = db.Column(db.DateTime, nullable=True)
+    f_name = db.Column(db.String(30), nullable=True)
+    l_name = db.Column(db.String(30), nullable=True)
+    phone = db.Column(db.Integer, nullable=True)
+    birth_date = db.Column(db.DATE, nullable=True)
     gender = db.Column(db.String(1), nullable=True)
     # notifications = db.Column(db.Boolean, default=False)
 
@@ -59,9 +63,14 @@ class Goal(db.Model):
     __tablename__ = "goals"
 
     goal_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+    type_id = db.Column(db.String(1),
+                        db.ForeignKey('types.type_id'),
+                        nullable=False)
     name = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime, nullable=True)
-    type_id = db.Column(db.String(1), db.ForeignKey('types.type_id'))
+    date_created = db.Column(db.DateTime, nullable=False)
     
     # Define relationship to type
     goal_type = db.relationship("Type",
@@ -83,11 +92,12 @@ class Track(db.Model):
     __tablename__ = "tracks"
 
     track_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    goal_id = db.Column(db.Integer, db.ForeignKey('goals.goal_id'))
-    start_date = db.Column(db.DateTime, nullable=False)
-    end_date = db.Column(db.DateTime, nullable=False)
+    goal_id = db.Column(db.Integer,
+                        db.ForeignKey('goals.goal_id'),
+                        nullable=False)
+    duration = db.Column(DateRangeType, nullable=False)
     repeat = db.Column(db.Boolean, default=False)
-    num_times = db.Column(db.Int, nullable=False)
+    num_times = db.Column(db.Integer, nullable=False)
 
     #DATES: may want to store as DATERANGE data type rather than separate 
     #start/end. May also need to have convo with Katie if dates stored to not
@@ -95,6 +105,7 @@ class Track(db.Model):
 
     # Define relationship to user
     user = db.relationship("User",
+                           secondary="goals",
                            backref=db.backref("tracks",
                                               order_by=goal_id))
 
@@ -116,10 +127,13 @@ class Completion(db.Model):
   __tablename__ = 'completions'
 
   comp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-  track_id = db.Column(db.Integer, db.ForeignKey('tracks.track_id'))
+  track_id = db.Column(db.Integer,
+                       db.ForeignKey('tracks.track_id'),
+                       nullable=False)
   comp_week = db.Column(db.Integer, nullable=False)
   comp_day = db.Column(db.String(3), nullable=False)
   comp_location = db.Column(db.String(50))
+  comp_time = db.Column(db.TIME)
   comp_notes = db.Column(db.String(150))
 
 
@@ -143,14 +157,18 @@ class High_Five(db.Model):
     __tablename__ = "high_fives"
 
     hfive_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    comp_id = db.Column(db.Integer, db.ForeignKey('completions.comp_id'))
-    hfiver_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    comp_id = db.Column(db.Integer,
+                        db.ForeignKey('completions.comp_id'),
+                        nullable=False)
+    hfiver_id = db.Column(db.Integer,
+                          db.ForeignKey('users.user_id'),
+                          nullable=False)
     hfive_date = db.Column(db.DateTime, nullable=False)
 
     # Define relationship to track
     track = db.relationship("Completion",
-                            backref=db.backref("high_fives",
-                                               order_by=track_id))
+                            backref=db.backref("high_fives"))
+                            #come back to order_by
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -167,12 +185,12 @@ class Friendship(db.Model):
     __tablename__ = "friendships"
 
     fship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    friend_A_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    friend_B_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
-    # Define relationship to track
-    user = db.relationship("User",
-                            backref=db.backref("friends"))
+    friend_A_id = db.Column(db.Integer,
+                            db.ForeignKey('users.user_id'),
+                            nullable=False)
+    friend_B_id = db.Column(db.Integer,
+                            db.ForeignKey('users.user_id'),
+                            nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -189,10 +207,18 @@ class Sharing(db.Model):
     __tablename__ = "sharings"
 
     share_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    track_id = db.Column(db.Integer, db.ForeignKey('tracks.track_id'))
-    sharer_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    sharee_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    track_id = db.Column(db.Integer,
+                         db.ForeignKey('tracks.track_id'),
+                         nullable=False)
+    sharer_id = db.Column(db.Integer,
+                          db.ForeignKey('users.user_id'),
+                          nullable=False)
+    sharee_id = db.Column(db.Integer,
+                          db.ForeignKey('users.user_id'),
+                          nullable=False)
 
+    # Define relationship to track
+    track = db.relationship("Track", backref=db.backref("sharings"))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -263,5 +289,7 @@ if __name__ == "__main__":
     # you in a state of being able to work with the database directly.
 
     from server import app
+    # app = Flask(__name__)
     connect_to_db(app)
+    db.create_all()
     print "Connected to DB."
