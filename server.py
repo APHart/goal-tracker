@@ -1,4 +1,4 @@
-"""Movie Ratings."""
+"""Goal Tracker"""
 
 from jinja2 import StrictUndefined
 
@@ -42,10 +42,9 @@ def register_process():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    user = User.query.filter(User.email == email or
-                             User.username == username).first()
+    user = User.query.filter((User.email == email) |
+                             (User.username == username)).first()
 
-    # print users[0]
     if user:
         flash('That email address is already registered, please log in.')
         return redirect("/login")
@@ -54,8 +53,9 @@ def register_process():
         #user_id = new_user.user_id
         db.session.add(new_user)
         db.session.commit()
+        session['user_id'] = new_user.user_id
         flash('''Successfully registered. Let's start tracking your goals!''')
-        return redirect("/user/<new_user.username>")
+        return redirect("/user/<username>")
 
 
 @app.route("/login", methods=["GET"])
@@ -71,8 +71,8 @@ def login_process():
     loginname = request.form.get("loginname")
     password = request.form.get("password")
 
-    user = User.query.filter(User.email == loginname or 
-                             User.username == loginname).first()
+    user = User.query.filter((User.email == loginname) | 
+                             (User.username == loginname)).first()
 
     if not user or user.password != password:
         flash('Incorrect username, email or password.')
@@ -88,11 +88,7 @@ def login_process():
 @app.route("/logout", methods=["POST"])
 def logout():
     """User account logout."""
-    # session.pop removes user_id key/value from session, does not set value to none
-    # session.pop('user_id', None)
-    # print session['user_id']
 
-    #delete user_id from session
     del session['user_id']
     flash('You have successfully logged out...bye!')
 
@@ -100,12 +96,11 @@ def logout():
 
 
 @app.route("/user/<username>")
-def user_dashboard(user_id):
+def user_dashboard(user):
     """Show user details."""
 
+    user_id = session['user_id']
     user = User.query.filter(User.user_id == user_id).first()
-
-    user_goals = user.goals
 
     return render_template("user-dashboard.html",
                            user=user)

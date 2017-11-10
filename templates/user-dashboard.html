@@ -20,7 +20,6 @@
     <ul>
         {% for track in tracks %}
            <li><button id="track.track_id" >{{ track.goal.name }}</button></li>
-    
     {% else %}
         <h2>You do not have any current goals.</h2>
     {% endif %}
@@ -31,22 +30,10 @@
 
         <form action="/add-goal" method="POST">
             <select name="new_goal">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+                {% for goal in user.goals %}
+                <option value="goal.goal_id">goal.name</option>
             </select>
-            <input type="hidden" name="movie_id" value="{{ movie.movie_id }}">
-            <input type="submit" value="Rate It!">
+            <input type="submit" value="Add">
         </form>
     {% endif %}
-
-    <br>
-    <h2>User Ratings</h2>
-    <ul>
-      {% for rating in ratings %}
-        <li>Rating: {{ rating.score }}, User: {{ rating.user_id }}</li>
-      {% endfor %}
-    </ul>
 {% endblock %}
