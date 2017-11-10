@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
+
+<head>
+  <title>Join</title>
+</head>
+
 {% block content %}
 
     <h2>Join</h2>
     
     <form action="/join" method="POST">
+      Enter your username:<br>
+      <input type="text" name="username" required> 
+      <br>
+      <br>
       Enter your email address:<br>
       <input type="text" name="email" required> 
       <br>

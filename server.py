@@ -38,10 +38,12 @@ def register_form():
 def register_process():
     """Adds new user and redirects to user dashboard."""
 
+    username = request.form.get("username")
     email = request.form.get("email")
     password = request.form.get("password")
 
-    user = User.query.filter(User.email == email).first()
+    user = User.query.filter(User.email == email or
+                             User.username == username).first()
 
     # print users[0]
     if user:
@@ -53,8 +55,7 @@ def register_process():
         db.session.add(new_user)
         db.session.commit()
         flash('''Successfully registered. Let's start tracking your goals!''')
-        return redirect("/user/<new_user.user_id>")
-        #return redirect("/<user_id>", user_id=user_id)
+        return redirect("/user/<new_user.username>")
 
 
 @app.route("/login", methods=["GET"])
@@ -67,18 +68,20 @@ def login():
 def login_process():
     """User account login process."""
 
-    email = request.form.get("email")
+    loginname = request.form.get("loginname")
     password = request.form.get("password")
 
-    user = User.query.filter(User.email == email).first()
+    user = User.query.filter(User.email == loginname or 
+                             User.username == loginname).first()
+
     if not user or user.password != password:
-        flash('Incorrect email or password.')
+        flash('Incorrect username, email or password.')
         return redirect("/login")
 
     elif user and user.password == password:
         session['user_id'] = user.user_id
         flash('You have successfully logged in...woohoo!')
-        url = "/user/" + str(user.user_id)
+        url = "/user/" + str(user.username)
         return redirect(url)
     
 
@@ -96,23 +99,16 @@ def logout():
     return redirect("/")
 
 
-@app.route("/user/<user_id>")
+@app.route("/user/<username>")
 def user_dashboard(user_id):
     """Show user details."""
 
     user = User.query.filter(User.user_id == user_id).first()
-    print user
 
-    age = user.age
-    zipcode = user.zipcode
-
-    user_goals = user.ratings
+    user_goals = user.goals
 
     return render_template("user-dashboard.html",
-                           user_id=user_id,
-                           age=age,
-                           zipcode=zipcode,
-                           ratings=user_ratings)
+                           user=user)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+<head>
+  <title>{{ user.username }}/Dashboard</title>
+</head>
+
+<!-- jQuery script -->
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<!-- Script & Stylesheet for editable select element -->
+<script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+<link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
+
+{% block content %}
+
+    {% if tracks %}
+    <h2>{{ Your Current Goals: }}</h2>
+    <br>
+    <br>
+    <!-- Show user's current goal tracks by goal name -->
+    <ul>
+        {% for track in tracks %}
+           <li><button id="track.track_id" >{{ track.goal.name }}</button></li>
+    
+    {% else %}
+        <h2>You do not have any current goals.</h2>
+    {% endif %}
+
+    <!-- Add a Goal Form -->
+    <h3 id="add_goal">Add a new goal</h3>
+
+
+        <form action="/add-goal" method="POST">
+            <select name="new_goal">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input type="hidden" name="movie_id" value="{{ movie.movie_id }}">
+            <input type="submit" value="Rate It!">
+        </form>
+    {% endif %}
+
+    <br>
+    <h2>User Ratings</h2>
+    <ul>
+      {% for rating in ratings %}
+        <li>Rating: {{ rating.score }}, User: {{ rating.user_id }}</li>
+      {% endfor %}
+    </ul>
+{% endblock %}
