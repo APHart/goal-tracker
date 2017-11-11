@@ -92,13 +92,16 @@ class Goal(db.Model):
                                 backref=db.backref("goals",
                                 order_by=type_id))
 
+    #Define relationship to user
+    user = db.relationship("User", backref=db.backref("goals", order_by=name))
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Goal goal_id=%s name=%s type_id=%s repeat=%s>" % (self.goal_id,
+        return "<Goal goal_id=%s name=%s type_id=%s user_id=%s>" % (self.goal_id,
                                                                    self.name,
                                                                    self.type_id,
-                                                                   self.repeat)
+                                                                   self.user_id)
 
 
 class Track(db.Model):

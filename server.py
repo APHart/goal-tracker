@@ -81,8 +81,8 @@ def login_process():
     elif user and user.password == password:
         session['user_id'] = user.user_id
         flash('You have successfully logged in...woohoo!')
-        url = "/user/" + str(user.username)
-        return redirect(url)
+        # url = "/user/" + str(user.username)
+        return redirect("/user/<username>")
     
 
 @app.route("/logout", methods=["POST"])
@@ -96,14 +96,18 @@ def logout():
 
 
 @app.route("/user/<username>")
-def user_dashboard(user):
+def user_dashboard(username):
     """Show user details."""
 
     user_id = session['user_id']
     user = User.query.filter(User.user_id == user_id).first()
+    tracks = user.tracks
+
+    print user
+    print tracks
 
     return render_template("user-dashboard.html",
-                           user=user)
+                           user=user, tracks=tracks)
 
 
 if __name__ == "__main__":
