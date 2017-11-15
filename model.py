@@ -294,7 +294,7 @@ def example_data():
 
     db.session.add_all([u1,typ1,typ2,typ3,g1,t1])
     db.session.commit()
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     db.session.add_all([c1,c2])
     db.session.commit()

@@ -100,20 +100,20 @@ def user_dashboard(username):
     """Show user details."""
 
     user_id = session['user_id']
-    user = User.query.filter(User.user_id == user_id).first()
+    user = User.query.get(user_id)
     tracks = user.tracks
 
     print tracks
 
     return render_template("user-dashboard.html",
-                           user=user, tracks=tracks, goal_list=goal_list)
+                           user=user, tracks=tracks)
 
 @app.route("/get-goals.json")
 def goal_list():
     """Get list of user goals for autocomplete data in 'new goal' input."""
 
     user_id = session['user_id']
-    user = User.query.filter(User.user_id == user_id).first()
+    user = User.query.get(user_id)
     goal_list = [goal.name for goal in user.goals]
 
     return jsonify(goal_list)
@@ -125,33 +125,39 @@ def add_goal():
     # print request.form
 
     user_id = session['user_id']
-    user = User.query.filter(User.user_id == user_id).first()
+    user = User.query.get(user_id)
     type_id = request.form.get("goal_type")
-    name = request.form.get("new_goal_name"),
+    name = request.form.get("new_goal_name")
     date_created = datetime.now()
-
-    print type_id
-
-    new_goal = Goal(user_id=user_id,
-              type_id=type_id,
-              name=name,
-              date_created=date_created)
-
-    duration = request.form.get("duration")
-    print duration
-    start_date = request.form.get("start_date")
-    # end_date = start_date + 7
-
-    print start_date
-    # print end_date
-
-    new_track = Track(goal_id=new_goal.goal_id,
-               duration='[2017-11-08,2017-11-15)',
-               num_times=3)
 
     goal_list = [goal.name for goal in user.goals]
 
-    return jsonify(goal_list)
+    if name not in goal_list:
+        new_goal = Goal(user_id=user_id,
+                  type_id=type_id,
+                  name=name,
+                  date_created=date_created)
+
+        db.session.add(new_goal)
+        db.session.commit()
+
+    duration = int(request.form.get("duration")) * 7
+    num_times = request.form.get("num_times")
+    start_date = request.form.get("start_date")
+    end_date = datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=(duration))
+    end_date = str(end_date.date())
+
+    goals = user.goals
+    print goal_id
+
+    new_track = Track(goal_id=new_goal.goal_id,
+               duration='[' + start_date + ',' + end_date + ')',
+               num_times=num_times)
+
+    db.session.add(new_track)
+    db.session.commit()
+
+    return "Success!"
 
 
 if __name__ == "__main__":
