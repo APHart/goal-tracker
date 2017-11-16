@@ -269,7 +269,7 @@ def example_data():
               date_created='2017-11-08 08:45:00')
 
     t1 = Track(goal_id=1,
-               duration='[2017-11-08,2017-11-15)',
+               duration='[2017-11-08,2017-11-15]',
                num_times=3)
 
     c1 = Completion(track_id=1,

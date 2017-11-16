@@ -94,19 +94,27 @@ def logout():
 
     return redirect("/")
 
-
 @app.route("/user/<username>")
 def user_dashboard(username):
     """Show user details."""
 
     user_id = session['user_id']
     user = User.query.get(user_id)
+    today = date.today()
+    print today
+    # import pdb; pdb.set_trace()
     tracks = user.tracks
-
     print tracks
+    current_tracks = []
+    print current_tracks
+
+    for track in tracks:
+        if today in track.duration:
+            current_tracks.append(track)
+
 
     return render_template("user-dashboard.html",
-                           user=user, tracks=tracks)
+                           user=user, current_tracks=current_tracks)
 
 @app.route("/get-goals.json")
 def goal_list():
@@ -122,14 +130,14 @@ def goal_list():
 def add_goal():
     """Add new user goal (if not present) and new goal track."""
 
-    # print request.form
-
+    #get form values for goal record
     user_id = session['user_id']
     user = User.query.get(user_id)
     type_id = request.form.get("goal_type")
     name = request.form.get("new_goal_name")
     date_created = datetime.now()
 
+    #if goal has not been used previously, create new goal in db
     goal_list = [goal.name for goal in user.goals]
 
     if name not in goal_list:
@@ -141,17 +149,20 @@ def add_goal():
         db.session.add(new_goal)
         db.session.commit()
 
-    duration = int(request.form.get("duration")) * 7
+    #get form values and calculate end date for track record
+    duration = (int(request.form.get("duration")) * 7) + 1
     num_times = request.form.get("num_times")
     start_date = request.form.get("start_date")
     end_date = datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=(duration))
     end_date = str(end_date.date())
 
-    goals = user.goals
-    print goal_id
+    added_goal = Goal.query.filter(Goal.user_id == user_id , 
+                                   Goal.name == name).first()
 
-    new_track = Track(goal_id=new_goal.goal_id,
-               duration='[' + start_date + ',' + end_date + ')',
+    print added_goal
+    # print goal_id
+    new_track = Track(goal_id=added_goal.goal_id,
+               duration='[' + start_date + ',' + end_date + ']',
                num_times=num_times)
 
     db.session.add(new_track)

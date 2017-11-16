@@ -34,6 +34,7 @@ function addGoal(evt) {
         "start_date": $("#start_date").val(),
         "duration": $("#duration").val(),
         "repeat": $("#repeat").val(),
+        "num_times": $("#num_times").val(),
     };
 
     $.post("/add-goal.json", formValues, addGoalResult);
