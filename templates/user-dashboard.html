@@ -19,32 +19,34 @@
            </li>
            <br>
            </div>
+
+        <div id="goalModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" 
+                data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{ track.goal.name }}</h4>
+              </div>
+              <div class="modal-body">
+                <p>Some text in the modal.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" 
+                data-dismiss="modal">Close</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
         {% endfor %}
     {% else %}
         <h2>You do not have any current goals.</h2>
     {% endif %}
 
-    <div id="goalModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" 
-            data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Goal Name Here</h4>
-          </div>
-          <div class="modal-body">
-            <p>Some text in the modal.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
-            data-dismiss="modal">Close</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
 
     <!-- Add a Goal Form -->
     <div>
