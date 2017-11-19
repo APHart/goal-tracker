@@ -14,39 +14,40 @@
         {% for track in current_tracks %}
            <div id="current_tracks">
            <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
-                class="btn btn-info active goal-btn" data-toggle="modal" 
+                class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}"
                 data-target="#goalModal">{{ track.goal.name }}</button>
            </li>
            <br>
            </div>
-
-        <div id="goalModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" 
-                data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">{{ track.goal.name }}</h4>
-              </div>
-              <div class="modal-body">
-                <p>Some text in the modal.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" 
-                data-dismiss="modal">Close</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
         {% endfor %}
     {% else %}
         <h2>You do not have any current goals.</h2>
     {% endif %}
 
+    <!-- Modal Window For Goal-->
+    <div id="goalModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" 
+            data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"><span id="goal-name"></span></h4>
+          </div>
+          <div class="modal-body">
+            <p>Current Completion Count: <span id="curr-completions"></span></p>
+            <form id="add-completions"
+              <input id="track-id" type="hidden" name="track-id">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+            data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <!-- Add a Goal Form -->
     <div>

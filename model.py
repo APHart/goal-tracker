@@ -154,6 +154,11 @@ class Completion(db.Model):
   comp_time = db.Column(db.TIME)
   comp_notes = db.Column(db.String(150))
 
+  # Define relationship to track
+  track = db.relationship("Track",
+                          backref=db.backref("completions",
+                                             order_by=comp_id))
+
 
 class High_Five(db.Model):
     """High Fives given/received by user on goal tracking website"""

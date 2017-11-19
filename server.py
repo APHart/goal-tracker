@@ -101,17 +101,16 @@ def user_dashboard(username):
     user_id = session['user_id']
     user = User.query.get(user_id)
     today = date.today()
-    print today
-    # import pdb; pdb.set_trace()
     tracks = user.tracks
-    print tracks
     current_tracks = []
-    print current_tracks
 
     for track in tracks:
         if today in track.duration:
             current_tracks.append(track)
-
+            print track.duration.lower
+            print track.duration.upper
+            print track.duration.length.days
+            print type(track.duration.length.days)
 
     return render_template("user-dashboard.html",
                            user=user, current_tracks=current_tracks)
@@ -125,6 +124,34 @@ def goal_list():
     goal_list = [goal.name for goal in user.goals]
 
     return jsonify(goal_list)
+
+@app.route("/get-completions.json")
+def completion_total():
+    """Get total, if any, completions for given track."""
+
+    
+
+    print request.args.get("t_id")
+
+    track_id = request.args.get("t_id")
+
+    print type(track_id)
+
+    print track_id
+
+    # import pdb; pdb.set_trace()
+
+    track = Track.query.get(track_id)
+    completion_list = track.completions
+    count = 0
+
+    if completion_list:
+        for completion in completion_list:
+            count += 1
+
+    print count
+
+    return jsonify(count)
 
 @app.route("/add-goal.json", methods=['POST'])
 def add_goal():

@@ -41,3 +41,27 @@ function addGoal(evt) {
 }
 
 $("#add_goal_form").on("submit", addGoal);
+
+function getCompletions(track_id) {
+    $.get("/get-completions.json", {t_id: track_id}, function(results) {
+    console.log(results);
+    $("#curr-completions").text(results);
+    })
+}
+
+function showModal(evt) {
+    let goalName = $(this).text();
+    $("#goal-name").text(goalName);
+
+    let track_id = $(this).data("t-id");
+    console.log(track_id);
+
+    $.get("/get-completions.json", {t_id: track_id}, function(results) {
+    console.log(results);
+    $("#curr-completions").text(results);
+    })
+
+    $("#goalModal").modal("show");
+}
+
+$(".goal-btn").click(showModal);
