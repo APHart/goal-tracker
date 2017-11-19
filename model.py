@@ -148,8 +148,7 @@ class Completion(db.Model):
   track_id = db.Column(db.Integer,
                        db.ForeignKey('tracks.track_id'),
                        nullable=False)
-  comp_week = db.Column(db.Integer, nullable=False)
-  comp_day = db.Column(db.String(3), nullable=False)
+  comp_date = db.Column(db.DATE, nullable=False)
   comp_location = db.Column(db.String(50))
   comp_time = db.Column(db.TIME)
   comp_notes = db.Column(db.String(150))
@@ -274,26 +273,24 @@ def example_data():
               date_created='2017-11-08 08:45:00')
 
     t1 = Track(goal_id=1,
-               duration='[2017-11-08,2017-11-15]',
+               duration='[2017-11-17,2017-11-23]',
                num_times=3)
 
     c1 = Completion(track_id=1,
-                    comp_week=1,
-                    comp_day='Wed',
+                    comp_date='2017-11-17',
                     comp_location='My new gym',
                     comp_time='16:30',
                     comp_notes='Awesome')
 
     c2 = Completion(track_id=1,
-                    comp_week=1,
-                    comp_day='Thu',
+                    comp_date='2017-11-19',
                     comp_location='My new gym',
                     comp_time='06:30',
                     comp_notes='Too early!')
 
     hf1 = High_Five(comp_id=1,
                     hfiver_id=1,
-                    hfive_date='2017-11-09 11:00')
+                    hfive_date='2017-11-19 11:00')
 
 
 

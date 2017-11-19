@@ -157,6 +157,8 @@ def completion_total():
 def add_goal():
     """Add new user goal (if not present) and new goal track."""
 
+    print "received post request"
+
     #get form values for goal record
     user_id = session['user_id']
     user = User.query.get(user_id)

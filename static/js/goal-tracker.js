@@ -37,18 +37,14 @@ function addGoal(evt) {
         "num_times": $("#num_times").val(),
     };
 
+    console.log("in addGoal");
+
     $.post("/add-goal.json", formValues, addGoalResult);
 }
 
 $("#add_goal_form").on("submit", addGoal);
 
-function getCompletions(track_id) {
-    $.get("/get-completions.json", {t_id: track_id}, function(results) {
-    console.log(results);
-    $("#curr-completions").text(results);
-    })
-}
-
+//Show modal when goal/track button is clicked.
 function showModal(evt) {
     let goalName = $(this).text();
     $("#goal-name").text(goalName);
