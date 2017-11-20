@@ -82,7 +82,7 @@ def login_process():
         session['user_id'] = user.user_id
         flash('You have successfully logged in...woohoo!')
         # url = "/user/" + str(user.username)
-        return redirect("/user/<username>")
+        return redirect("/user/<username>", username=user.username)
     
 
 @app.route("/logout", methods=["POST"])
@@ -107,15 +107,15 @@ def user_dashboard(username):
     for track in tracks:
         if today in track.duration:
             current_tracks.append(track)
-            print track.duration.lower
-            print track.duration.upper
-            print track.duration.length.days
-            print type(track.duration.length.days)
+            # print track.duration.lower
+            # print track.duration.upper
+            # print track.duration.length.days
+            # print type(track.duration.length.days)
 
     return render_template("user-dashboard.html",
                            user=user, current_tracks=current_tracks)
 
-@app.route("/get-goals.json")
+@app.route("/get-goals.json", methods=['GET'])
 def goal_list():
     """Get list of user goals for autocomplete data in 'new goal' input."""
 
@@ -125,18 +125,12 @@ def goal_list():
 
     return jsonify(goal_list)
 
-@app.route("/get-completions.json")
+@app.route("/get-completions.json", methods=['GET'])
 def completion_total():
     """Get total, if any, completions for given track."""
 
-    
-
-    print request.args.get("t_id")
-
     track_id = request.args.get("t_id")
-
     print type(track_id)
-
     print track_id
 
     # import pdb; pdb.set_trace()
@@ -148,8 +142,6 @@ def completion_total():
     if completion_list:
         for completion in completion_list:
             count += 1
-
-    print count
 
     return jsonify(count)
 
@@ -188,8 +180,7 @@ def add_goal():
     added_goal = Goal.query.filter(Goal.user_id == user_id , 
                                    Goal.name == name).first()
 
-    print added_goal
-    # print goal_id
+
     new_track = Track(goal_id=added_goal.goal_id,
                duration='[' + start_date + ',' + end_date + ']',
                num_times=num_times)

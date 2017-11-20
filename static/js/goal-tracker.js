@@ -42,7 +42,7 @@ function addGoal(evt) {
     $.post("/add-goal.json", formValues, addGoalResult);
 }
 
-$("#add_goal_form").on("submit", addGoal);
+$("#add_goal_submit").click(addGoal);
 
 //Show modal when goal/track button is clicked.
 function showModal(evt) {
