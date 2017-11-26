@@ -20,7 +20,7 @@ autoCompleteList();
 //Inserts jquery datepicker for start date field.
 $(function insertDatePicker() {
     $("#start-date").datepicker({dateFormat: 'yy-mm-dd' });
-    // $("#comp-date").datepicker({dateFormat: 'yy-mm-dd' });
+    $("#comp-date").datepicker({dateFormat: 'yy-mm-dd' });
 
 });
 
@@ -49,9 +49,11 @@ function addGoalResult(results) {
 function addGoal(evt) {
     evt.preventDefault();
 
+    debugger;
+
     let formValues = {
         "new_goal_name": $("#new-goal-name").val(),
-        "goal_type": $("#goal-type").val(),
+        "goal_type": $("#input[name=goal-type]:checked").val(),
         "start_date": $("#start-date").val(),
         "duration": $("#duration").val(),
         "repeat": $("#repeat").val(),
@@ -61,7 +63,7 @@ function addGoal(evt) {
     $.post("/add-goal.json", formValues, addGoalResult);
 }
 
-$("#add_goal_form").on("submit", addGoal);
+$("#add-goal-form").on("submit", addGoal);
 
 //Show modal when goal/track button is clicked.
 function showModal(evt) {
@@ -91,8 +93,7 @@ function addCompResult(results) {
     }
 
     else if (results == "Fail") {
-        alert("The completion date entered is not
-              in the date range of the goal.");
+        alert("The completion date entered is not in the date range of the goal.");
     }
 
 }
