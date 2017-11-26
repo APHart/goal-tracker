@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 from flask import (Flask, jsonify, render_template, redirect,
-                   request, flash, session)
+                   request, flash, session, url_for)
 from flask_debugtoolbar import DebugToolbarExtension
 from model import (connect_to_db, db, User, Goal, Track, Completion, Type,
                    High_Five, Friendship, Sharing)
@@ -82,7 +82,8 @@ def login_process():
         session['user_id'] = user.user_id
         flash('You have successfully logged in...woohoo!')
         # url = "/user/" + str(user.username)
-        return redirect("/user/<username>", username=user.username)
+        # return redirect("/user/<username>")
+        return redirect(url_for("user_dashboard", username=user.username))
     
 
 @app.route("/logout", methods=["POST"])
@@ -96,7 +97,7 @@ def logout():
 
 @app.route("/user/<username>")
 def user_dashboard(username):
-    """Show user details."""
+    """Show user goal info."""
 
     user_id = session['user_id']
     user = User.query.get(user_id)
@@ -171,7 +172,7 @@ def add_goal():
         db.session.commit()
 
     #get form values and calculate end date for track record
-    duration = (int(request.form.get("duration")) * 7) + 1
+    duration = (int(request.form.get("duration")) * 6)
     num_times = request.form.get("num_times")
     start_date = request.form.get("start_date")
     end_date = datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=(duration))
@@ -188,7 +189,56 @@ def add_goal():
     db.session.add(new_track)
     db.session.commit()
 
-    return "Success!"
+    today = date.today()
+    if today in new_track.duration:
+        add_button = True
+
+    else:
+        add_button = False
+
+    results = {
+        'id': new_track.track_id, 
+        'name': added_goal.name, 
+        'duration': str(new_track.duration), 
+        'num_times': num_times,
+        'type': added_goal.type_id, 
+        'add': add_button,
+    }
+
+    return jsonify(results)
+
+@app.route("/add-completion.json", methods=['POST'])
+def add_completion():
+    """Add new completion info for user goal track."""
+
+    print "received post request"
+
+    #get form values for goal record
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    track_id = request.form.get("track-id")
+    comp_date = request.form.get("comp-date")
+    comp_location = request.form.get("comp-loc")
+    comp_time = request.form.get("comp-time")
+    comp_notes = request.form.get("comp-notes")
+
+    date_range = (Track.query.filter(Track.track_id == track_id)).duration
+
+    if comp_date in date_range:
+
+        new_comp = Completion(track_id=track_id,
+                              comp_date=comp_date,
+                              comp_location=comp_loc, 
+                              comp_notes=comp_notes)
+
+        db.session.add(new_comp)
+        db.session.commit()
+
+        return "Success"
+
+    else:
+
+        return "Fail"
 
 
 if __name__ == "__main__":

@@ -5,21 +5,27 @@
 {% endblock %}
 
 {% block content %}
-
     
     {% if current_tracks %}
         <h2>Your Current Goals: </h2>
         <!-- Show user's current goal tracks by goal name -->
         <ul style="list-style: none">
-        {% for track in current_tracks %}
-           <div id="current_tracks">
-           <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
-                class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}"
-                data-target="#goalModal">{{ track.goal.name }}</button>
-           </li>
-           <br>
-           </div>
-        {% endfor %}
+          <div id="current-tracks">
+          {% for track in current_tracks %}
+
+             <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
+              class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}"
+              data-target="#goalModal">
+              {% if track.goal.type_id == 'L' %}
+                Only 
+              {% endif %}
+              {{ track.goal.name }} {{ track.num_times }}
+                times
+              </button>
+             </li>
+           <br>  
+          {% endfor %}
+        </div>
     {% else %}
         <h2>You do not have any current goals.</h2>
     {% endif %}
@@ -37,8 +43,13 @@
           </div>
           <div class="modal-body">
             <p>Current Completion Count: <span id="curr-completions"></span></p>
-            <form id="add-completions"
+            <form id="add-completions">
+              <h3>Enter new completion info:</h3>
               <input id="track-id" type="hidden" name="track-id">
+              When? <input id="comp-date" type="text" name="comp-date">
+              How many times? <input id="comp-times" type="number" name="comp-times">
+              <input id="new-comp" type="submit" name="new-comp" value="Save">
+            </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" 
@@ -53,28 +64,28 @@
     <div>
     <h3 id="add_goal">Add a new goal</h3>
 
-        <form id="add_goal_form" action="/add-goal.json" method="POST" name="add_goal_form">
+        <form id="add_goal_form">
             Goal Name:
             <input type="text" id="new_goal_name" name="new_goal_name">
             <br>
             Goal Type:
-            <input type="radio" id="goal_type" name="goal_type" value='P'>Push
-            <input type="radio" id="goal_type" name="goal_type" value='L'>Limit
+            <input type="radio" id="type-push" value="P" name="goal-type" > Push
+            <input type="radio" id="type-limit" value="L" name="goal-type" > Limit
             <br>
             Amount to push for -or- limit to:
-            <input type="number" id="num_times" name="num_times">
+            <input type="number" id="num-times" name="num-times">
             <br>
             Duration:
-            <input type="radio" id="duration" name="duration" value='1'>1 Week
-            <input type="radio" id="duration" name="duration" value='4'>1 Month (4 weeks)
+            <input type="radio" id="dur-week" name="duration" value='1'>1 Week
+            <input type="radio" id="dur-month" name="duration" value='4'>1 Month (4 weeks)
             <br>
             Start Date:
-            <input type="text" id="start_date" name="start_date">
+            <input type="text" id="start-date" name="start-date">
             <br>
             Check to Repeat:
             <input type="checkbox" id="repeat" name="repeat" value=True>
             <br>
-            <input type="submit" id="add_goal_submit" value="Add Goal to Spire">
+            <input type="submit" id="add-goal-submit" value="Add Goal to Spire">
         </form>
     </div>
 
