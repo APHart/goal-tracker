@@ -110,7 +110,7 @@ function addCompletion(evt) {
 
 }
 
-$("add-completion-form").on("submit", addCompletion);
+$("new-comp-submit").on("click", addCompletion);
 
 
 });
