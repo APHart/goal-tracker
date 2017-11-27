@@ -1,8 +1,6 @@
 "use strict";
 
 
-
-
 $(document).ready(function() {
 
 //Sets previous goals as autocomplete data for new goal field.
@@ -14,8 +12,6 @@ function autoCompleteList(){
     });
 }
 autoCompleteList();
-
-
 
 //Inserts jquery datepicker for start date field.
 $(function insertDatePicker() {
@@ -49,13 +45,11 @@ function addGoalResult(results) {
 function addGoal(evt) {
     evt.preventDefault();
 
-    debugger;
-
     let formValues = {
         "new_goal_name": $("#new-goal-name").val(),
-        "goal_type": $("#input[name=goal-type]:checked").val(),
+        "goal_type": $("input[name=goal-type]:checked").val(),
         "start_date": $("#start-date").val(),
-        "duration": $("#duration").val(),
+        "duration": $("input[name=duration]:checked").val(),
         "repeat": $("#repeat").val(),
         "num_times": $("#num-times").val(),
     };
@@ -86,6 +80,8 @@ function showModal(evt) {
     $("#goalModal").modal("show");
 }
 
+$(document).on("click", ".goal-btn", showModal);
+
 //Show result of adding completion info
 function addCompResult(results) {
     if (results == "Success") {
@@ -102,6 +98,8 @@ function addCompResult(results) {
 function addCompletion(evt) {
     evt.preventDefault();
 
+    debugger;
+
     let formValues = {
         "track-id": $("#track-id").val(),
         "comp-date": $("#comp-date").val(),
@@ -112,7 +110,7 @@ function addCompletion(evt) {
 
 }
 
-$(document).on("click", ".goal-btn", showModal);
+$("add-completion-form").on("submit", addCompletion);
 
 
 });
