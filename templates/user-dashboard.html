@@ -45,15 +45,24 @@
             <p>Current Completion Count: <span id="curr-completions"></span></p>
             <form id="add-completion-form">
               <h3>Enter new completion info:</h3>
-              <input id="track-id" type="hidden" name="track-id">
-              When? <input id="comp-date" type="text" name="comp-date">
-              How many times? <input id="comp-times" type="number" name="comp-times">
-              <input type="submit" id="new-comp-submit" value="Save">
+              <input id="track-id" type="hidden">
+              Date <input id="comp-date" type="text" name="comp-date" required>
+              <!-- How many times? <input id="comp-times" type="number" name="comp-times" required> -->
+              <br>
+              Location <input id="comp-loc" type="text" name="comp-loc">
+              <br>
+              Time <input id="comp-time" type ="time" name="comp-time">
+              <br>
+              <span>Notes</span> 
+              <br>
+              <textarea id="comp-notes" type="textarea" name="comp-notes"></textarea>
             </form>
           </div>
+          <div id="comp-added" hidden>Completion added to Goal.spirE</div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" 
             data-dismiss="modal">Close</button>
+            <button id="new-comp-submit" class="btn btn-primary">Save</button>
           </div>
         </div>
 

@@ -69,8 +69,9 @@ function showModal(evt) {
 
     $("#goal-name").text(goalName);
 
-    let track_id = $(this).data("t-id");
+    let track_id = $(this).data("tId");
     console.log(track_id);
+    $("#track-id").val(track_id);
 
     $.get("/get-completions.json", {t_id: track_id}, function(results) {
     console.log(results);
@@ -85,7 +86,14 @@ $(document).on("click", ".goal-btn", showModal);
 //Show result of adding completion info
 function addCompResult(results) {
     if (results == "Success") {
-        alert("Way to go!");
+        let track_id = $("#track-id").val()
+
+        $("#add-completion-form").trigger("reset");
+        $("#comp-added").fadeIn().delay(3000).fadeOut();
+
+        $.get("/get-completions.json", {t_id: track_id}, function(results) {
+        $("#curr-completions").text(results);
+    })
     }
 
     else if (results == "Fail") {
@@ -98,19 +106,24 @@ function addCompResult(results) {
 function addCompletion(evt) {
     evt.preventDefault();
 
-    debugger;
-
     let formValues = {
         "track-id": $("#track-id").val(),
         "comp-date": $("#comp-date").val(),
-        "comp-times": $("#comp-times").val(),
+        "comp-loc": $("#comp-loc").val(),
+        "comp-time": $("#comp-time").val(),
+        "comp-notes": $("#comp-notes").val(),
     };
 
     $.post("/add-completion.json", formValues, addCompResult);
 
 }
 
-$("new-comp-submit").on("click", addCompletion);
+$("#new-comp-submit").on("click", addCompletion);
+
+//clears add-completion form inputs upon modal close
+// $("#goalModal").on("hidden.bs.modal", function () {
+//     $(this).find("#add-completion-form").trigger("reset");
+// })
 
 
 });

@@ -12,6 +12,11 @@ db = SQLAlchemy()
 
 
 ##############################################################################
+#Constants
+
+MAX_TEXT_LENGTH = 100
+
+
 # Model definitions
 
 class User(db.Model):

@@ -211,8 +211,6 @@ def add_goal():
 def add_completion():
     """Add new completion info for user goal track."""
 
-    print "received post request"
-
     #get form values for goal record
     user_id = session['user_id']
     user = User.query.get(user_id)
@@ -222,13 +220,18 @@ def add_completion():
     comp_time = request.form.get("comp-time")
     comp_notes = request.form.get("comp-notes")
 
-    date_range = (Track.query.filter(Track.track_id == track_id)).duration
+    if not comp_time:
+        comp_time = "00:00:00"
+
+    date_range = (Track.query.filter(Track.track_id == track_id).first()).duration
+    comp_date = (datetime.strptime(comp_date, '%Y-%m-%d')).date()
 
     if comp_date in date_range:
 
         new_comp = Completion(track_id=track_id,
                               comp_date=comp_date,
-                              comp_location=comp_loc, 
+                              comp_location=comp_location, 
+                              comp_time=comp_time,
                               comp_notes=comp_notes)
 
         db.session.add(new_comp)
