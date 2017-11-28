@@ -16,7 +16,6 @@ db = SQLAlchemy()
 
 MAX_TEXT_LENGTH = 100
 
-
 # Model definitions
 
 class User(db.Model):
@@ -268,6 +267,15 @@ def example_data():
               phone='4151234321',
               birth_date='1982-01-01')
 
+    u2 = User(
+              email='celolaroo@testmail.com',
+              username='Celola',
+              password='Panacakes',
+              f_name='Celestial',
+              l_name='Being',
+              phone='4159876543',
+              birth_date='1984-12-31')
+
     typ1 = Type(type_id='P', type_name='Push')
     typ2 = Type(type_id='L', type_name='Limit')
     typ3 = Type(type_id='H', type_name='Head-2-heaD')
@@ -297,9 +305,16 @@ def example_data():
                     hfiver_id=1,
                     hfive_date='2017-11-19 11:00')
 
+    f1 = Friendship(friend_A_id=1,
+                    friend_B_id=2)
+
+    sh1 = Sharing(track_id=1,
+                  sharer_id=1,
+                  sharee_id=2)
 
 
-    db.session.add_all([u1,typ1,typ2,typ3,g1,t1])
+
+    db.session.add_all([u1,u2,typ1,typ2,typ3,g1,t1])
     db.session.commit()
     # import pdb; pdb.set_trace()
 
@@ -307,6 +322,12 @@ def example_data():
     db.session.commit()
 
     db.session.add_all([hf1])
+    db.session.commit()
+
+    db.session.add_all([f1])
+    db.session.commit()
+
+    db.session.add_all([sh1])
     db.session.commit()
 
 

@@ -5,10 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    
+
+    <!-- Current User Goal Tracks -->
+    <div id="current-goals">
     {% if current_tracks %}
         <h2>Your Current Goals: </h2>
-        <!-- Show user's current goal tracks by goal name -->
+        <!-- Create button for user's current goal tracks by goal name -->
         <ul style="list-style: none">
           <div id="current-tracks">
           {% for track in current_tracks %}
@@ -29,6 +31,7 @@
     {% else %}
         <h2>You do not have any current goals.</h2>
     {% endif %}
+    </div>
 
     <!-- Modal Window For Goal-->
     <div id="goalModal" class="modal fade" role="dialog">
@@ -95,6 +98,38 @@
             <input type="checkbox" id="repeat" name="repeat" value=True>
             <br>
             <input type="submit" id="add-goal-submit" value="Add Goal to Spire">
+        </form>
+    </div>
+
+    <!-- User Friends -->
+    <div>
+      <h2>Your Goal.spirE Friends:</h2>
+      <div id="user-friends">
+      {% if user_friends %}
+        <!-- Create button for user's current goal tracks by goal name -->
+        <ul style="list-style: none">
+          <div id="current-user-friends">
+          {% for friend in user_friends %}
+             <li><button id="{{ friend.user_id }}" name="{{ friend.username }}"
+              class="btn btn-info active friend-btn" data-target="#friendModal">{{ friend.username }}
+              </button>
+             </li>
+           <br>  
+          {% endfor %}
+        </div>
+    {% else %}
+        <h2>You have not added any friends.</h2>
+    {% endif %}
+    </div>
+        <!-- Add a Friend Form -->
+    <div>
+    <h3 id="add-friend">Add a new friend</h3>
+
+        <form id="add-friend-form">
+            Enter your friend's Username:
+            <input type="text" id="new-friend-name" name="new-friend-name">
+            <br>
+            <input type="submit" id="add-friend-submit" value="Add Friend">
         </form>
     </div>
 

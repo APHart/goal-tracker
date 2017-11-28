@@ -49,13 +49,13 @@ def register_process():
         flash('That email address is already registered, please log in.')
         return redirect("/login")
     else:
-        new_user = User(email=email, password=password)
+        new_user = User(email=email, username=username, password=password)
         #user_id = new_user.user_id
         db.session.add(new_user)
         db.session.commit()
         session['user_id'] = new_user.user_id
         flash('''Successfully registered. Let's start tracking your goals!''')
-        return redirect("/user/<username>")
+        return redirect(url_for("user_dashboard", username=username))
 
 
 @app.route("/login", methods=["GET"])
@@ -97,13 +97,14 @@ def logout():
 
 @app.route("/user/<username>")
 def user_dashboard(username):
-    """Show user goal info."""
+    """Show user dashboard info."""
 
     user_id = session['user_id']
     user = User.query.get(user_id)
     today = date.today()
     tracks = user.tracks
     current_tracks = []
+    friends = user.friends
 
     for track in tracks:
         if today in track.duration:
@@ -114,7 +115,8 @@ def user_dashboard(username):
             # print type(track.duration.length.days)
 
     return render_template("user-dashboard.html",
-                           user=user, current_tracks=current_tracks)
+                           user=user, current_tracks=current_tracks,
+                           user_friends=friends)
 
 @app.route("/get-goals.json", methods=['GET'])
 def goal_list():
@@ -134,8 +136,6 @@ def completion_total():
     print type(track_id)
     print track_id
 
-    # import pdb; pdb.set_trace()
-
     track = Track.query.get(track_id)
     completion_list = track.completions
     count = 0
@@ -149,8 +149,6 @@ def completion_total():
 @app.route("/add-goal.json", methods=['POST'])
 def add_goal():
     """Add new user goal (if not present) and new goal track."""
-
-    print "received post request"
 
     #get form values for goal record
     user_id = session['user_id']
@@ -242,6 +240,42 @@ def add_completion():
     else:
 
         return "Fail"
+
+@app.route("/add-friend.json", methods=['POST'])
+def add_friend():
+    """Add new user friend (if username present in db)."""
+
+    #get form values for goal record
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    friend_username = request.form.get("friend-username")
+    # date_created = datetime.now()
+    import pdb; pdb.set_trace()
+    #if friend_username registerd user in db, create new user friendship
+    friend = User.query.filter(User.username == friend_username).first()
+    existing_friend = Friendship.query.filter(Friendship.friend_A_id == user_id, 
+                                              Friendship.friend_B_id == 
+                                              friend.user_id)
+
+    if friend is True and existing_friend is False:
+        new_friendship = Friendship(friend_A_id=user_id,
+                                    friend_B_id=friend.user_id,
+                                    )
+
+        db.session.add(new_friend)
+        db.session.commit()
+        add_button = True
+
+    else:
+        add_button = False
+
+    results = {
+        'id': friend.user_id, 
+        'name': friend.username, 
+        'add': add_button,
+    }
+
+    return jsonify(results)
 
 
 if __name__ == "__main__":

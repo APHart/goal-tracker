@@ -120,10 +120,33 @@ function addCompletion(evt) {
 
 $("#new-comp-submit").on("click", addCompletion);
 
-//clears add-completion form inputs upon modal close
-// $("#goalModal").on("hidden.bs.modal", function () {
-//     $(this).find("#add-completion-form").trigger("reset");
-// })
+//Ajax request to add a friend 
+//(currently must be registered user and no permission needed)
+//will update in the future to allow email invites and permissions required
+function addFriend(evt) {
+    evt.preventDefault();
 
+    let formValues = {
+        "friend-username": $("#new-friend-name").val()
+    };
+
+    $.post("/add-friend.json", formValues, addFriendResult);
+}
+
+$("#add-friend-form").on("submit", addFriend);
+
+function addFriendResult(results) {
+
+     if (results["add"] == true) {
+        let newButton = $("<button>");
+        newButton.attr("id", results.id);
+        newButton.attr("name", results.name);
+        newButton.attr("class", "btn btn-info active friend-btn");
+        newButton.attr("data-target", "#friendModal")
+        newButton.innerHTML = results.name;
+        newButton.append(results.name);
+        $("#user-friends").append(newButton);
+    }  
+}
 
 });
