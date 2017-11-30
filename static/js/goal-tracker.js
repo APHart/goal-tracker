@@ -22,7 +22,7 @@ $(function insertDatePicker() {
 
 //When new goal is added, adds new goal to autocomplete list.
 function addGoalResult(results) {
-    autoCompleteList();
+    
     alert("Your new goal has been added!");
 
     if (results["add"] == true) {
@@ -34,10 +34,27 @@ function addGoalResult(results) {
         newButton.attr("data-num-times", results.num_times);
         newButton.attr("data-goal-type", results.type);
         newButton.attr("data-t-id", results.id);
+        newButton.attr("data-length", results.length)
         newButton.attr("data-target", "#goalModal")
-        newButton.innerHTML = results.name;
-        newButton.append(results.name);
+        newButton.html(results.name + " " + results.num_times + " time(s) this " 
+                       + results.length + " ");
+        
+        if (results.type == "L") {
+            newButton.append('<a data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a>');
+        }
+        else if (results.type == "P") {
+            newButton.append('<a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a>');
+        }
+        
         $("#current-tracks").append(newButton);
+        
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $("#add-goal-form").trigger("reset");
+
+        autoCompleteList();
     }
 }
 
@@ -146,7 +163,14 @@ function addFriendResult(results) {
         newButton.innerHTML = results.name;
         newButton.append(results.name);
         $("#user-friends").append(newButton);
-    }  
+    }
+    else if (results["add"] == false) {
+        alert("You are already friends with " + results.name + ".");
+    } 
 }
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 });

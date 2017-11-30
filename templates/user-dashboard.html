@@ -16,13 +16,14 @@
           {% for track in current_tracks %}
 
              <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
-              class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}"
-              data-target="#goalModal">
-              {% if track.goal.type_id == 'L' %}
-                Only 
-              {% endif %}
+              class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}" data-length="{{ track.length }}" data-target="#goalModal">
               {{ track.goal.name }} {{ track.num_times }}
-                times
+                time(s) this {{ track.length }}
+              {% if track.goal.type_id == 'L' %}
+                <a data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
+              {% else %}
+                <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
+              {% endif %}
               </button>
              </li>
            <br>  

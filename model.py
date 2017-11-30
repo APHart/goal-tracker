@@ -59,7 +59,7 @@ class User(db.Model):
 
         return "<User user_id=%s email=%s name=%s>" % (self.user_id, 
                                                        self.email,
-                                                       self.f_name)
+                                                       self.username)
 
 class Type(db.Model):
     """Goal types."""

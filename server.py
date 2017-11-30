@@ -107,7 +107,15 @@ def user_dashboard(username):
     friends = user.friends
 
     for track in tracks:
+        if track.duration.length.days <= 7:
+            length = "week"
+        else:
+            length = "month"
+
+        # import pdb; pdb.set_trace()
+
         if today in track.duration:
+            track.length = length
             current_tracks.append(track)
             # print track.duration.lower
             # print track.duration.upper
@@ -190,6 +198,12 @@ def add_goal():
     today = date.today()
     if today in new_track.duration:
         add_button = True
+        print duration
+
+        if duration == 6:
+            new_track.length = "week"
+        elif duration == 24:
+            new_track.length = "month"
 
     else:
         add_button = False
@@ -199,7 +213,8 @@ def add_goal():
         'name': added_goal.name, 
         'duration': str(new_track.duration), 
         'num_times': num_times,
-        'type': added_goal.type_id, 
+        'type': added_goal.type_id,
+        'length': new_track.length, 
         'add': add_button,
     }
 
@@ -249,20 +264,19 @@ def add_friend():
     user_id = session['user_id']
     user = User.query.get(user_id)
     friend_username = request.form.get("friend-username")
-    # date_created = datetime.now()
-    import pdb; pdb.set_trace()
+    
     #if friend_username registerd user in db, create new user friendship
     friend = User.query.filter(User.username == friend_username).first()
     existing_friend = Friendship.query.filter(Friendship.friend_A_id == user_id, 
                                               Friendship.friend_B_id == 
-                                              friend.user_id)
+                                              friend.user_id).first()
 
-    if friend is True and existing_friend is False:
+    if friend and existing_friend is None:
         new_friendship = Friendship(friend_A_id=user_id,
                                     friend_B_id=friend.user_id,
                                     )
 
-        db.session.add(new_friend)
+        db.session.add(new_friendship)
         db.session.commit()
         add_button = True
 
