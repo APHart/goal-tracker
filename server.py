@@ -45,7 +45,6 @@ def completion_percentage(track_id):
 
     if track.goal.type_id == "P":
         percentage = (float(total) / track.num_times) * 100
-        print percentage, "******", total, track.num_times
 
     elif track.goal.type_id == "L":
         if total <= track.num_times:
@@ -169,21 +168,6 @@ def goal_list():
 
     return jsonify(goal_list)
 
-@app.route("/get-completions.json", methods=['GET'])
-def get_completion_total():
-    """Get total, if any, completions for given track."""
-
-    track_id = request.args.get("t_id")
-    count = completion_total(track_id)
-    percent = completion_percentage(track_id)
-
-    print percent, count, track_id, "****** from get_completion_total"
-
-    results = {'count': count,
-              'percent': percent}
-
-    return jsonify(results)
-
 @app.route("/add-goal.json", methods=['POST'])
 def add_goal():
     """Add new user goal (if not present) and new goal track."""
@@ -249,6 +233,19 @@ def add_goal():
         'percent_comp': percent_comp,
         'add': add_button,
     }
+
+    return jsonify(results)
+
+@app.route("/get-completions.json", methods=['GET'])
+def get_completion_data():
+    """Get total completions, if any, & percent complete for given track."""
+
+    track_id = request.args.get("t_id")
+    count = completion_total(track_id)
+    percent = completion_percentage(track_id)
+
+    results = {'count': count,
+              'percent': percent}
 
     return jsonify(results)
 

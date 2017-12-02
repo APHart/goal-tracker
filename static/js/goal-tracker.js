@@ -104,24 +104,21 @@ $(document).on("click", ".goal-btn", showModal);
 
 //Show result of adding completion info
 function addCompResult(results) {
-    // if (results == "Success") {
+    if (results == "Success") {
         let track_id = $("#track-id").val()
-
-        console.log("Hellooo from inside result function!");
 
         $("#add-completion-form").trigger("reset");
         $("#comp-added").fadeIn().delay(3000).fadeOut();
 
         $.get("/get-completions.json", {t_id: track_id}, function(results) {
-        debugger;
         $("#curr-completions").text(results.count);
         $("#comp-" + track_id).text(results.percent + "%");
     })
-    // }
+    }
 
-    // else if (results == "Fail") {
-    //     alert("The completion date entered is not in the date range of the goal.");
-    // }
+    else if (results == "Fail") {
+        alert("The completion date entered is not in the date range of the goal.");
+    }
 
 }
 
@@ -174,6 +171,12 @@ function addFriendResult(results) {
         alert("You are already friends with " + results.name + ".");
     } 
 }
+
+$(".friend-btn").on("click", function () {
+        username = $(this).target.html
+        location.href = "/user/<username>/GoalShare-<friend_name>";
+};
+
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
