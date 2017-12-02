@@ -46,7 +46,10 @@ function addGoalResult(results) {
             newButton.append('<a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a>');
         }
         
-        $("#current-tracks").append(newButton);
+        let newSpan = $("<span>");
+        newSpan.text(results.percent_comp + " %");
+
+        $("#current-tracks").append(newButton, newSpan);
         
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -91,8 +94,7 @@ function showModal(evt) {
     $("#track-id").val(track_id);
 
     $.get("/get-completions.json", {t_id: track_id}, function(results) {
-    console.log(results);
-    $("#curr-completions").text(results);
+    $("#curr-completions").text(results.count);
     })
 
     $("#goalModal").modal("show");
@@ -102,20 +104,24 @@ $(document).on("click", ".goal-btn", showModal);
 
 //Show result of adding completion info
 function addCompResult(results) {
-    if (results == "Success") {
+    // if (results == "Success") {
         let track_id = $("#track-id").val()
+
+        console.log("Hellooo from inside result function!");
 
         $("#add-completion-form").trigger("reset");
         $("#comp-added").fadeIn().delay(3000).fadeOut();
 
         $.get("/get-completions.json", {t_id: track_id}, function(results) {
-        $("#curr-completions").text(results);
+        debugger;
+        $("#curr-completions").text(results.count);
+        $("#comp-" + track_id).text(results.percent + "%");
     })
-    }
+    // }
 
-    else if (results == "Fail") {
-        alert("The completion date entered is not in the date range of the goal.");
-    }
+    // else if (results == "Fail") {
+    //     alert("The completion date entered is not in the date range of the goal.");
+    // }
 
 }
 

@@ -20,6 +20,40 @@ app.secret_key = "SECRET"
 # error.
 app.jinja_env.undefined = StrictUndefined
 
+#helper functions regarding completion(s) for a given goal.
+def completion_total(track_id):
+    """Get total, if any, completions for given track."""
+
+    # track_id = request.args.get("t_id")
+
+    track = Track.query.get(track_id)
+    completion_list = track.completions
+    count = 0
+
+    if completion_list:
+        for completion in completion_list:
+            count += 1
+
+    return count
+
+def completion_percentage(track_id):
+    """Calculates the completion percentage/progress for given track."""
+
+    total = completion_total(track_id)
+
+    track = Track.query.get(track_id)
+
+    if track.goal.type_id == "P":
+        percentage = (float(total) / track.num_times) * 100
+        print percentage, "******", total, track.num_times
+
+    elif track.goal.type_id == "L":
+        if total <= track.num_times:
+            percentage = 100
+        else:
+            percentage = 100 - ((float(total) / track.num_times) * 100)
+
+    return percentage
 
 @app.route('/')
 def index():
@@ -107,14 +141,13 @@ def user_dashboard(username):
     friends = user.friends
 
     for track in tracks:
-        if track.duration.length.days <= 7:
+        if track.duration.length.days == 6:
             length = "week"
-        else:
+        elif track.duration.length.days == 24:
             length = "month"
 
-        # import pdb; pdb.set_trace()
-
         if today in track.duration:
+            track.percent_comp = completion_percentage(track.track_id)
             track.length = length
             current_tracks.append(track)
             # print track.duration.lower
@@ -137,22 +170,19 @@ def goal_list():
     return jsonify(goal_list)
 
 @app.route("/get-completions.json", methods=['GET'])
-def completion_total():
+def get_completion_total():
     """Get total, if any, completions for given track."""
 
     track_id = request.args.get("t_id")
-    print type(track_id)
-    print track_id
+    count = completion_total(track_id)
+    percent = completion_percentage(track_id)
 
-    track = Track.query.get(track_id)
-    completion_list = track.completions
-    count = 0
+    print percent, count, track_id, "****** from get_completion_total"
 
-    if completion_list:
-        for completion in completion_list:
-            count += 1
+    results = {'count': count,
+              'percent': percent}
 
-    return jsonify(count)
+    return jsonify(results)
 
 @app.route("/add-goal.json", methods=['POST'])
 def add_goal():
@@ -198,7 +228,8 @@ def add_goal():
     today = date.today()
     if today in new_track.duration:
         add_button = True
-        print duration
+
+        percent_comp = completion_percentage(new_track.track_id)
 
         if duration == 6:
             new_track.length = "week"
@@ -214,7 +245,8 @@ def add_goal():
         'duration': str(new_track.duration), 
         'num_times': num_times,
         'type': added_goal.type_id,
-        'length': new_track.length, 
+        'length': new_track.length,
+        'percent_comp': percent_comp,
         'add': add_button,
     }
 
@@ -272,11 +304,14 @@ def add_friend():
                                               friend.user_id).first()
 
     if friend and existing_friend is None:
-        new_friendship = Friendship(friend_A_id=user_id,
-                                    friend_B_id=friend.user_id,
-                                    )
+        new_friendship1 = Friendship(friend_A_id=user_id,
+                                     friend_B_id=friend.user_id,
+                                     ) 
+        new_friendship2 = Friendship(friend_A_id=friend.user_id,
+                                     friend_B_id=user_id,
+                                     )
 
-        db.session.add(new_friendship)
+        db.session.add_all([new_friendship1,new_friendship2])
         db.session.commit()
         add_button = True
 
