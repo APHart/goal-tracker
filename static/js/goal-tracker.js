@@ -162,7 +162,6 @@ function addFriendResult(results) {
         newButton.attr("id", results.id);
         newButton.attr("name", results.name);
         newButton.attr("class", "btn btn-info active friend-btn");
-        newButton.attr("data-target", "#friendModal")
         newButton.innerHTML = results.name;
         newButton.append(results.name);
         $("#user-friends").append(newButton);
@@ -172,10 +171,24 @@ function addFriendResult(results) {
     } 
 }
 
-$(".friend-btn").on("click", function () {
-        username = $(this).target.html
-        location.href = "/user/<username>/GoalShare-<friend_name>";
-};
+function goToFriendSharePage($this) {
+    let user_name = $(this).data("username");
+    let friend_name = $(this).name;
+    let friend_id = $(this).id;
+
+    console.log(friend_name);
+
+    // let data = {
+    //     username: "user_name",
+    //     friend_name: "friend_name",
+    //     friend_id: "friend_id",
+    // };
+
+    // $.post("/user/<username>/GoalShare-<friend_name>", data, function () {
+    //     console.log("returned")
+    // });
+
+}
 
 
 $(function () {

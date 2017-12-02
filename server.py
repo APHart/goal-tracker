@@ -158,6 +158,47 @@ def user_dashboard(username):
                            user=user, current_tracks=current_tracks,
                            user_friends=friends)
 
+@app.route("/user/<username>/GoalShare-<friend_name>", methods=['POST'])
+def user_friend_goalshare_view(username,friend_name):
+    """Show user & friend goals"""
+
+    print "in share route"
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    today = date.today()
+    tracks = user.tracks
+    current_tracks = []
+    friend = User.query.get(data.friend_id)
+    friend_tracks = friend.tracks
+    current_friend_tracks = []
+
+    for track in tracks:
+        if track.duration.length.days == 6:
+            length = "week"
+        elif track.duration.length.days == 24:
+            length = "month"
+
+        if today in track.duration:
+            track.percent_comp = completion_percentage(track.track_id)
+            track.length = length
+            current_tracks.append(track)
+
+    for track in friend_tracks:
+        if track.duration.length.days == 6:
+            length = "week"
+        elif track.duration.length.days == 24:
+            length = "month"
+
+        if today in track.duration:
+            track.percent_comp = completion_percentage(track.track_id)
+            track.length = length
+            current_friend_tracks.append(track)
+
+    return render_template("friend-goal-share.html",
+                           user=user, current_tracks=current_tracks,
+                           friend=friend, friend_tracks=current_friend_tracks)
+
 @app.route("/get-goals.json", methods=['GET'])
 def goal_list():
     """Get list of user goals for autocomplete data in 'new goal' input."""
