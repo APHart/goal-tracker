@@ -25,7 +25,7 @@
                 <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span id="comp-{{track.track_id}}">{{ track.percent_comp }}%</span>
+              <span id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}%</span>
              </li>
            <br>  
           {% endfor %}
