@@ -183,9 +183,11 @@ function FriendShareInfo($this) {
 
     // debugger;
 
-    $.post("/friend-share-info", data, function () {
+    $.post("/friend-share-info", data, function (results) {
         console.log("returned");
-        window.location.replace("/user/<username>/GoalShare-<friend_name>");
+        let username = results.username;
+        let friend_name = results.friend_name;
+        window.location.replace("/user/" + username + "/GoalShare-" + friend_name);
     });
 }
 
