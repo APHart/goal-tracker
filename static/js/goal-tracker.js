@@ -171,24 +171,25 @@ function addFriendResult(results) {
     } 
 }
 
-function goToFriendSharePage($this) {
-    let user_name = $(this).data("username");
-    let friend_name = $(this).name;
-    let friend_id = $(this).id;
+function FriendShareInfo($this) {
 
-    console.log(friend_name);
+    let friend_name = ($this).name;
+    let friend_id = ($this).id;
 
-    // let data = {
-    //     username: "user_name",
-    //     friend_name: "friend_name",
-    //     friend_id: "friend_id",
-    // };
+    let data = {
+        friend_name: "friend_name",
+        friend_id: "friend_id",
+    };
 
-    // $.post("/user/<username>/GoalShare-<friend_name>", data, function () {
-    //     console.log("returned")
-    // });
+    // debugger;
+
+    $.post("/friend-share-info", data, function () {
+        console.log("returned");
+    });
 
 }
+
+window.FriendShareInfo = FriendShareInfo;
 
 
 $(function () {
@@ -196,3 +197,7 @@ $(function () {
 })
 
 });
+
+function audrey() {
+    console.log("Hellooo");
+}

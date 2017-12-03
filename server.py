@@ -158,18 +158,33 @@ def user_dashboard(username):
                            user=user, current_tracks=current_tracks,
                            user_friends=friends)
 
-@app.route("/user/<username>/GoalShare-<friend_name>", methods=['POST'])
+@app.route("/friend-share-info", methods=['POST'])
+def friend_share_info(data):
+    """Get user friend info for friend share page url."""
+
+    friend_name = request.form.get(friend_name)
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+
+    return redirect(url_for("user_friend_goalshare_view", 
+                            username=user.username,
+                            friend_name=friend_name))
+
+
+@app.route("/user/<username>/GoalShare-<friend_name>")
 def user_friend_goalshare_view(username,friend_name):
     """Show user & friend goals"""
 
     print "in share route"
+
+    import pdb; pdb.set_trace()
 
     user_id = session['user_id']
     user = User.query.get(user_id)
     today = date.today()
     tracks = user.tracks
     current_tracks = []
-    friend = User.query.get(data.friend_id)
+    friend = User.query.get(friend_id)
     friend_tracks = friend.tracks
     current_friend_tracks = []
 

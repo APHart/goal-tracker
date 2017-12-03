@@ -114,7 +114,8 @@
           {% for friend in user_friends %}
              <!-- <form action="/user/<username>/GoalShare-<friend_name>" method="GET"> -->
              <li><button id="{{ friend.user_id }}" name="{{ friend.username }}"
-              class="btn btn-info active friend-btn" onclick="goToFriendSharePage(this)" data-username="{{ user.username }}">{{ friend.username }}
+              class="btn btn-info active friend-btn" 
+              onclick="FriendShareInfo(this)">{{ friend.username }}
               </button>
              </li>
            <!-- </form> -->
