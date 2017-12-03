@@ -185,6 +185,7 @@ function FriendShareInfo($this) {
 
     $.post("/friend-share-info", data, function () {
         console.log("returned");
+        window.location.replace("/user/<username>/GoalShare-<friend_name>");
     });
 }
 

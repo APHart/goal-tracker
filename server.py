@@ -166,9 +166,16 @@ def friend_share_info():
     user_id = session['user_id']
     user = User.query.get(user_id)
 
-    return redirect(url_for("user_friend_goalshare_view", 
-                            username=user.username,
-                            friend_name=friend_name))
+    # return redirect(url_for("user_friend_goalshare_view", 
+    #                         username=user.username,
+    #                         friend_name=friend_name))
+
+    results = {
+        "username": user.username,
+        "friend_name": friend_name
+    }
+
+    return jsonify(results)
 
 
 @app.route("/user/<username>/GoalShare-<friend_name>")
