@@ -177,8 +177,8 @@ function FriendShareInfo($this) {
     let friend_id = ($this).id;
 
     let data = {
-        friend_name: "friend_name",
-        friend_id: "friend_id",
+        "friend_name": friend_name,
+        "friend_id": friend_id,
     };
 
     // debugger;
@@ -186,7 +186,6 @@ function FriendShareInfo($this) {
     $.post("/friend-share-info", data, function () {
         console.log("returned");
     });
-
 }
 
 window.FriendShareInfo = FriendShareInfo;

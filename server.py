@@ -159,10 +159,10 @@ def user_dashboard(username):
                            user_friends=friends)
 
 @app.route("/friend-share-info", methods=['POST'])
-def friend_share_info(data):
+def friend_share_info():
     """Get user friend info for friend share page url."""
 
-    friend_name = request.form.get(friend_name)
+    friend_name = request.form.get("friend_name")
     user_id = session['user_id']
     user = User.query.get(user_id)
 
@@ -177,14 +177,12 @@ def user_friend_goalshare_view(username,friend_name):
 
     print "in share route"
 
-    import pdb; pdb.set_trace()
-
     user_id = session['user_id']
     user = User.query.get(user_id)
     today = date.today()
     tracks = user.tracks
     current_tracks = []
-    friend = User.query.get(friend_id)
+    friend = User.query.filter(User.username == friend_name).first()
     friend_tracks = friend.tracks
     current_friend_tracks = []
 
@@ -209,6 +207,9 @@ def user_friend_goalshare_view(username,friend_name):
             track.percent_comp = completion_percentage(track.track_id)
             track.length = length
             current_friend_tracks.append(track)
+
+    print current_tracks
+    print current_friend_tracks
 
     return render_template("friend-goal-share.html",
                            user=user, current_tracks=current_tracks,
