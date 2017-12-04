@@ -25,7 +25,31 @@
                 <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}%</span>
+              <span id="comp-{{track.track_id}}">
+                <!-- {{ "%0.0f" | format(track.percent_comp|float) }}%</span> -->
+              <canvas id="user-completion-chart"></canvas>
+                <span id="user-comp-legend" class="chart-legend"></span>
+              </span>
+              <script>
+                let options = {
+                  responsive: true
+                };
+
+                let ctx_donut = $("#user-completion-chart").get(0).getContext("2d");
+
+                let track = {
+                    "track_id": {{track.track_id}}
+                };
+
+                $.get("/completion-chart.json", track, function (data) {
+                  let compChart = new Chart(ctx_donut, {
+                                                          type: 'doughnut',
+                                                          data: data,
+                                                          options: options
+                                                        });
+                  $('#user-comp-legend').html(compChart.generateLegend());
+                });
+             </script>
              </li>
            <br>  
           {% endfor %}
@@ -52,7 +76,31 @@
                 <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}%</span>
+              <span id="comp-{{track.track_id}}">
+                <!-- {{ "%0.0f" | format(track.percent_comp|float) }}% -->
+                <canvas id="friend-completion-chart"></canvas>
+                <span id="friend-comp-legend" class="chart-legend"></span>
+              </span>
+              <script>
+                let options = {
+                  responsive: true
+                };
+
+                let ctx_donut = $("#friend-completion-chart").get(0).getContext("2d");
+
+                let track = {
+                    "track_id": {{track.track_id}}
+                };
+
+                $.get("/completion-chart.json", track, function (data) {
+                  let compChart = new Chart(ctx_donut, {
+                                                          type: 'doughnut',
+                                                          data: data,
+                                                          options: options
+                                                        });
+                  $('#friend-comp-legend').html(compChart.generateLegend());
+                });
+             </script>
              </li>
            <br>  
           {% endfor %}

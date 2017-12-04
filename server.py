@@ -349,6 +349,25 @@ def add_completion():
 
         return "Fail"
 
+@app.route("/completion-chart.json")
+def completion_chart_data():
+    """Generates doughnut chart for percent complete for given goal track."""
+
+    track = request.args.get("track_id")
+    percent_comp = completion_percentage(track.track_id)
+
+    data_dict = {
+        "labels": ["percent complete"],
+        "datasets": [
+            {
+                "data": [percent_comp],
+                "backgroundColor": ["#36A2EB"],
+                "hoverBackgroundColor": ["#36cfeb"]
+            }]
+    }
+
+    return jsonify(data_dict)
+
 @app.route("/add-friend.json", methods=['POST'])
 def add_friend():
     """Add new user friend (if username present in db)."""
