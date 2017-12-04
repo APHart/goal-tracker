@@ -12,16 +12,41 @@
 </head>
 
 <body>
-  {% if 'user_id' in session %}
-  <form action="/logout" method="POST">
-    <input type="submit" id="logout" value="Log Out">
-  </form>
-  {% else %}
-  <a href="/login">Log In</a>
-  <br>
-  <a href="/join">Join</a>
-  {% endif %}
-
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button"
+              class="navbar-toggle collapsed" 
+              data-toggle="collapse" 
+              data-target="#navbar" 
+              aria-controls="navbar" 
+              aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <h1 class="navbar-brand">Goal.spirE</h1>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar">
+    <div class="collapse navbar-collapse" id="navbar">
+      {% if 'user_id' in session %}
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <form class ="form-inline" action="/logout" method="POST">
+              <input type="submit" id="logout" value="Log Out">
+            </form>
+          </li>
+        </ul>
+      {% else %}
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/login">Log In</a></li>
+          <li><a href="/join">Join</a></li>
+      {% endif %} 
+    </div>
+    </div>
+  </div>
+  </nav>
 
   <hr>
     {% with messages = get_flashed_messages() %}

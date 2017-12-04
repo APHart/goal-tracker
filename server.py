@@ -354,7 +354,9 @@ def completion_chart_data():
     """Generates doughnut chart for percent complete for given goal track."""
 
     track = request.args.get("track_id")
-    percent_comp = completion_percentage(track.track_id)
+    percent_comp = completion_percentage(track)
+
+    print percent_comp
 
     data_dict = {
         "labels": ["percent complete"],

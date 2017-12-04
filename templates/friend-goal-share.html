@@ -15,7 +15,8 @@
           <div id="user-current-tracks">
           {% for track in current_tracks %}
 
-             <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
+             <li>
+              <button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
               class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}" data-length="{{ track.length }}">
               {{ track.goal.name }} {{ track.num_times }}
                 time(s) this {{ track.length }}
@@ -27,18 +28,18 @@
               </button>
               <span id="comp-{{track.track_id}}">
                 <!-- {{ "%0.0f" | format(track.percent_comp|float) }}%</span> -->
-              <canvas id="user-completion-chart"></canvas>
+                <canvas id="user-completion-chart"></canvas>
                 <span id="user-comp-legend" class="chart-legend"></span>
               </span>
               <script>
-                let options = {
+                var options = {
                   responsive: true
                 };
 
-                let ctx_donut = $("#user-completion-chart").get(0).getContext("2d");
+                var ctx_donut = $("#user-completion-chart").get(0).getContext("2d");
 
-                let track = {
-                    "track_id": {{track.track_id}}
+                var track = {
+                    "track_id": {{ track.track_id }}
                 };
 
                 $.get("/completion-chart.json", track, function (data) {
@@ -82,13 +83,13 @@
                 <span id="friend-comp-legend" class="chart-legend"></span>
               </span>
               <script>
-                let options = {
+                var options = {
                   responsive: true
                 };
 
-                let ctx_donut = $("#friend-completion-chart").get(0).getContext("2d");
+                var ctx_donut = $("#friend-completion-chart").get(0).getContext("2d");
 
-                let track = {
+                var track = {
                     "track_id": {{track.track_id}}
                 };
 
