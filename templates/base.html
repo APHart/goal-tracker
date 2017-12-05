@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  {% block title %} GoalSpire {% endblock %}
+  {% block title %}{% endblock %}
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
@@ -9,6 +9,8 @@
   <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="/static/css/goal-tracker.css">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Varela+Round" rel="stylesheet">
 </head>
 
 <body>
@@ -33,6 +35,7 @@
       {% if 'user_id' in session %}
         <ul class="nav navbar-nav navbar-right">
           <li>
+            <!-- <a type="submit" href="/logout">Log Out</a></li> -->
             <form class ="form-inline" action="/logout" method="POST">
               <input type="submit" id="logout" value="Log Out">
             </form>

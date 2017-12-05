@@ -5,14 +5,16 @@
 {% endblock %}
 
 {% block content %}
-
+  <div class="main-container" class="container-fluid">
+    <div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-6">
 <!-- Current User Goal Tracks -->
     <div id="user-current-goals">
     {% if current_tracks %}
         <h2>Your Current Goals: </h2>
         <!-- Create button for user's current goal tracks by goal name -->
         <ul style="list-style: none">
-          <div id="user-current-tracks">
+          <div class="current-tracks" id="user-current-tracks">
           {% for track in current_tracks %}
 
              <li>
@@ -21,17 +23,17 @@
               {{ track.goal.name }} {{ track.num_times }}
                 time(s) this {{ track.length }}
               {% if track.goal.type_id == 'L' %}
-                <a data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
+                <a class="type-tip" data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
               {% else %}
-                <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
+                <a class="type-tip" data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span id="comp-{{track.track_id}}">
-                <!-- {{ "%0.0f" | format(track.percent_comp|float) }}%</span> -->
-                <canvas id="user-completion-chart"></canvas>
+              <span class="comp-p" id="comp-{{track.track_id}}">
+                {{ "%0.0f" | format(track.percent_comp|float) }}% complete</span>
+                <!-- <canvas id="user-completion-chart"></canvas>
                 <span id="user-comp-legend" class="chart-legend"></span>
-              </span>
-              <script>
+              </span> -->
+              <!--<script>
                 var options = {
                   responsive: true
                 };
@@ -50,7 +52,7 @@
                                                         });
                   $('#user-comp-legend').html(compChart.generateLegend());
                 });
-             </script>
+             </script> -->
              </li>
            <br>  
           {% endfor %}
@@ -59,12 +61,15 @@
         <h2>You do not have any current goals.</h2>
     {% endif %}
     </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6 col-lg-6">
     <div id="friend-current-goals">
     {% if friend_tracks %}
         <h2>{{ friend.username }}'s Current Goals: </h2>
         <!-- Create button for user's current goal tracks by goal name -->
         <ul style="list-style: none">
-          <div id="friend-current-tracks">
+          <div class="current-tracks" id="friend-current-tracks">
           {% for track in friend_tracks %}
 
              <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
@@ -72,16 +77,16 @@
               {{ track.goal.name }} {{ track.num_times }}
                 time(s) this {{ track.length }}
               {% if track.goal.type_id == 'L' %}
-                <a data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
+                <a class="type-tip" data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
               {% else %}
-                <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
+                <a class="type-tip" data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span id="comp-{{track.track_id}}">
-                <!-- {{ "%0.0f" | format(track.percent_comp|float) }}% -->
-                <canvas id="friend-completion-chart"></canvas>
-                <span id="friend-comp-legend" class="chart-legend"></span>
+              <span class="comp-p" id="comp-{{track.track_id}}">
+                {{ "%0.0f" | format(track.percent_comp|float) }}% complete
               </span>
+                <!-- <canvas id="friend-completion-chart"></canvas>
+                <span id="friend-comp-legend" class="chart-legend"></span>
               <script>
                 var options = {
                   responsive: true
@@ -101,7 +106,7 @@
                                                         });
                   $('#friend-comp-legend').html(compChart.generateLegend());
                 });
-             </script>
+             </script> -->
              </li>
            <br>  
           {% endfor %}
@@ -110,7 +115,9 @@
         <h2>{{ friend.username }} does not have any current goals.</h2>
     {% endif %}
     </div>
-
+    </div>
+    </div>
+  </div>
 
 <script src="/static/js/goal-tracker.js"></script>
 

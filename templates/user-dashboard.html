@@ -5,14 +5,16 @@
 {% endblock %}
 
 {% block content %}
-
+  <div clss="main-container" class="container-fluid">
+    <div class="row">
+    <div class="col-xs-12 col-md-8 col-lg-8 goal-column">
     <!-- Current User Goal Tracks -->
     <div id="current-goals">
     {% if current_tracks %}
         <h2>Your Current Goals: </h2>
         <!-- Create button for user's current goal tracks by goal name -->
         <ul style="list-style: none">
-          <div id="current-tracks">
+          <div class="current-tracks" id="current-tracks">
           {% for track in current_tracks %}
 
              <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
@@ -20,12 +22,12 @@
               {{ track.goal.name }} {{ track.num_times }}
                 time(s) this {{ track.length }}
               {% if track.goal.type_id == 'L' %}
-                <a data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
+                <a class="type-tip" data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a> 
               {% else %}
-                <a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
+                <a class="type-tip" data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}%</span>
+              <span class="comp-p" id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}% complete</span>
              </li>
            <br>  
           {% endfor %}
@@ -96,21 +98,23 @@
             Start Date:
             <input type="text" id="start-date" name="start-date">
             <br>
-            Check to Repeat:
-            <input type="checkbox" id="repeat" name="repeat" value=True>
+            <!-- Check to Repeat:
+            <input type="checkbox" id="repeat" name="repeat" value=True> -->
             <br>
             <input type="submit" id="add-goal-submit" value="Add Goal to Spire">
         </form>
     </div>
+    </div>
 
     <!-- User Friends -->
+    <div class="col-xs-12 col-md-4 col-lg-4">
     <div>
       <h2>Your Goal.spirE Friends:</h2>
       <div id="user-friends">
       {% if user_friends %}
         <!-- Create button for user's current goal tracks by goal name -->
         <ul style="list-style: none">
-          <div id="current-user-friends">
+          <div class="friends" id="current-user-friends">
           {% for friend in user_friends %}
              <!-- <form action="/user/<username>/GoalShare-<friend_name>" method="GET"> -->
              <li><button id="{{ friend.user_id }}" name="{{ friend.username }}"
@@ -127,16 +131,21 @@
     {% endif %}
     </div>
         <!-- Add a Friend Form -->
-    <div>
+    <div >
     <h3 id="add-friend">Add a new friend</h3>
 
         <form id="add-friend-form">
-            Enter your friend's Username:
-            <input type="text" id="new-friend-name" name="new-friend-name">
+          <div class="form-group">
+            <label class="control-label" for="new-friend-name">Enter your friend's Username:</label>
+            <input class="form-control input-md" type="text" id="new-friend-name" name="new-friend-name">
             <br>
             <input type="submit" id="add-friend-submit" value="Add Friend">
+          </div>
         </form>
     </div>
+    </div>
+  </div>
+  </div>
 
 <script src="/static/js/goal-tracker.js"></script>
 
