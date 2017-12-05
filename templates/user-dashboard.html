@@ -53,16 +53,27 @@
             <form id="add-completion-form">
               <h3>Enter new completion info:</h3>
               <input id="track-id" type="hidden">
-              Date <input id="comp-date" type="text" name="comp-date" required>
-              <!-- How many times? <input id="comp-times" type="number" name="comp-times" required> -->
-              <br>
-              Location <input id="comp-loc" type="text" name="comp-loc">
-              <br>
-              Time <input id="comp-time" type ="time" name="comp-time">
-              <br>
-              <span>Notes</span> 
-              <br>
-              <textarea id="comp-notes" type="textarea" name="comp-notes"></textarea>
+              <div class="form-group">
+                <label for="comp-date">Date</label>
+                <input id="comp-date" type="text" name="comp-date" required> *
+              </div>
+                <!-- How many times? <input id="comp-times" type="number" name="comp-times" required> -->
+              <!-- <br> -->
+              <div class="form-group">
+                <label for="comp-loc">Location</label>
+                <input id="comp-loc" type="text" name="comp-loc">
+              </div>
+              <div class="form-group">
+                <label for="comp-time">Time</label>
+                <input id="comp-time" type ="time" name="comp-time">
+              </div>
+              <!-- <br> -->
+              <span>Notes</span>
+              <div class="form-group">
+                <label class="sr-only" for="comp-notes">Notes</label>
+                <textarea id="comp-notes" type="textarea" name="comp-notes"></textarea>
+              </div>
+              <div>* Required Field</div>
             </form>
           </div>
           <div id="comp-added" hidden>Completion added to Goal.spirE</div>
@@ -81,26 +92,30 @@
     <h3 id="add-goal">Add a new goal</h3>
 
         <form id="add-goal-form">
-            Goal Name:
+          <div class="form-group">
+            <label for="new-goal-name">Goal Name: </label>
             <input type="text" id="new-goal-name" name="new-goal-name">
-            <br>
-            Goal Type:
+          </div>
+          <div class="form-group">
+            <label for="goal-type">Goal Type: </label>
             <input type="radio" id="type-P" name="goal-type" value="P"> Push
             <input type="radio" id="type-L" name="goal-type" value="L"> Limit
-            <br>
-            Amount to push for -or- limit to:
+          </div>
+          <div class="form-group">
+            <label for="num-times">Amount to push for -or- limit to: </label>
             <input type="number" id="num-times" name="num-times">
-            <br>
-            Duration:
-            <input type="radio" id="dur-week" name="duration" value='1'>1 Week
-            <input type="radio" id="dur-month" name="duration" value='4'>1 Month (4 weeks)
-            <br>
-            Start Date:
+          </div>
+          <div class="form-group">
+            <label for="duration">Duration: </label>
+            <input type="radio" id="dur-week" name="duration" value='1'> 1 Week 
+            <input type="radio" id="dur-month" name="duration" value='4'> 1 Month (4 weeks)
+          </div>
+          <div class="form-group">
+            <label for="start-date">Start Date: </label>
             <input type="text" id="start-date" name="start-date">
-            <br>
+          </div>
             <!-- Check to Repeat:
             <input type="checkbox" id="repeat" name="repeat" value=True> -->
-            <br>
             <input type="submit" id="add-goal-submit" value="Add Goal to Spire">
         </form>
     </div>

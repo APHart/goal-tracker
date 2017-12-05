@@ -113,7 +113,7 @@ def login_process():
 
     elif user and user.password == password:
         session['user_id'] = user.user_id
-        flash('You have successfully logged in...woohoo!')
+        # flash('You have successfully logged in...woohoo!')
         # url = "/user/" + str(user.username)
         # return redirect("/user/<username>")
         return redirect(url_for("user_dashboard", username=user.username))
@@ -124,7 +124,7 @@ def logout():
     """User account logout."""
 
     del session['user_id']
-    flash('You have successfully logged out...bye!')
+    flash('You have successfully logged out.')
 
     return redirect("/")
 
