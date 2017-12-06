@@ -22,11 +22,10 @@ $(function insertDatePicker() {
 
 //When new goal is added, adds new goal to autocomplete list.
 function addGoalResult(results) {
-    
-    alert("Your new goal has been added!");
 
     if (results["add"] == true) {
-        let newButton = $("<button>");
+        let newLine = $("<li></li>");
+        let newButton = $("<button></button>");
         newButton.attr("id", results.id);
         newButton.attr("name", results.name);
         newButton.attr("class", "btn btn-info active goal-btn");
@@ -40,16 +39,18 @@ function addGoalResult(results) {
                        + results.length + " ");
         
         if (results.type == "L") {
-            newButton.append('<a data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a>');
+            newButton.append('<a class="type-tip" data-toggle="tooltip" title="Limit: a goal for limiting or decreasing an activity by setting how many times (max) in the chosen duration that you are striving for." data-placement="right">(Limit)</a>');
         }
         else if (results.type == "P") {
-            newButton.append('<a data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a>');
+            newButton.append('<a class="type-tip" data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a>');
         }
         
         let newSpan = $("<span>");
-        newSpan.text(results.percent_comp + " %");
+        newSpan.attr("class", "comp-p");
+        newSpan.text(" " + results.percent_comp + " %");
 
-        $("#current-tracks").append(newButton, newSpan);
+        newLine.append(newButton, newSpan);
+        $("#current-tracks").append(newLine);
         
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -158,13 +159,17 @@ $("#add-friend-form").on("submit", addFriend);
 function addFriendResult(results) {
 
      if (results["add"] == true) {
+        let newLine = $("<li></li>");
         let newButton = $("<button>");
         newButton.attr("id", results.id);
         newButton.attr("name", results.name);
         newButton.attr("class", "btn btn-info active friend-btn");
         newButton.innerHTML = results.name;
         newButton.append(results.name);
-        $("#user-friends").append(newButton);
+
+        newLine.append(newButton);
+
+        $("#user-friends").append(newLine);
     }
     else if (results["add"] == false) {
         alert("You are already friends with " + results.name + ".");

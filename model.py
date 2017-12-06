@@ -259,22 +259,31 @@ def example_data():
     """create example data for the test database."""
 
     u1 = User(
-              email='test@test.com',
-              username='Testy',
+              email='moe@stooges.com',
+              username='Moe',
               password='Password',
-              f_name='Bob',
-              l_name='Smith',
+              f_name='Moe',
+              l_name='Howard',
               phone='4151234321',
               birth_date='1982-01-01')
 
     u2 = User(
-              email='celolaroo@testmail.com',
-              username='Celola',
-              password='Panacakes',
-              f_name='Celestial',
-              l_name='Being',
+              email='larry@stooges.com',
+              username='Larry',
+              password='Pancakes',
+              f_name='Larry',
+              l_name='Fine',
               phone='4159876543',
               birth_date='1984-12-31')
+
+    u3 = User(
+              email='curly@stooges.com',
+              username='Curly',
+              password='Pickles',
+              f_name='Jerome',
+              l_name='Howward',
+              phone='4159876543',
+              birth_date='1986-12-31')
 
     typ1 = Type(type_id='P', type_name='Push')
     typ2 = Type(type_id='L', type_name='Limit')
@@ -282,22 +291,43 @@ def example_data():
 
     g1 = Goal(user_id=1,
               type_id='P',
-              name='Hit the Gym!',
-              date_created='2017-11-08 08:45:00')
+              name='Hit the Gym',
+              date_created='2017-12-02 08:45:00')
+
+    g2 = Goal(user_id=2,
+              type_id='L',
+              name='Eat pancakes',
+              date_created='2017-12-02 08:45:00')
 
     t1 = Track(goal_id=1,
-               duration='[2017-11-17,2017-11-23]',
+               duration='[2017-12-05,2017-12-11]',
                num_times=3)
 
+    t2 = Track(goal_id=2,
+               duration='[2017-12-05,2017-12-11]',
+               num_times=2)
+
     c1 = Completion(track_id=1,
-                    comp_date='2017-11-17',
-                    comp_location='My new gym',
+                    comp_date='2017-12-05',
+                    comp_location='Dumbells Athletic Club',
                     comp_time='16:30',
                     comp_notes='Awesome')
 
     c2 = Completion(track_id=1,
-                    comp_date='2017-11-19',
+                    comp_date='2017-12-6',
                     comp_location='My new gym',
+                    comp_time='06:30',
+                    comp_notes='Too early!')
+
+    c3 = Completion(track_id=2,
+                    comp_date='2017-12-05',
+                    comp_location='Favorite Diner',
+                    comp_time='16:30',
+                    comp_notes='Awesome')
+
+    c4 = Completion(track_id=2,
+                    comp_date='2017-12-6',
+                    comp_location='Not as good diner',
                     comp_time='06:30',
                     comp_notes='Too early!')
 
@@ -314,11 +344,11 @@ def example_data():
 
 
 
-    db.session.add_all([u1,u2,typ1,typ2,typ3,g1,t1])
+    db.session.add_all([u1,u2,u3,typ1,typ2,typ3,g1,g2,t1,t2])
     db.session.commit()
     # import pdb; pdb.set_trace()
 
-    db.session.add_all([c1,c2])
+    db.session.add_all([c1,c2,c3,c4])
     db.session.commit()
 
     db.session.add_all([hf1])

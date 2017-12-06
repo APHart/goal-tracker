@@ -19,6 +19,8 @@ app.secret_key = "SECRET"
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
 app.jinja_env.undefined = StrictUndefined
+#Detects changes in templates and reloads rather than statically caching
+app.jinja_env.auto_reload = True
 
 #helper functions regarding completion(s) for a given goal.
 def completion_total(track_id):

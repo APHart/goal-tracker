@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-  <div clss="main-container" class="container-fluid">
+  <div class="main-container" class="container-fluid">
     <div class="row">
-    <div class="col-xs-12 col-md-8 col-lg-8 goal-column">
+    <div id="goals-column" class="col-xs-12 col-md-8 col-lg-8 goal-column">
     <!-- Current User Goal Tracks -->
     <div id="current-goals">
     {% if current_tracks %}
@@ -94,30 +94,32 @@
         <form id="add-goal-form">
           <div class="form-group">
             <label for="new-goal-name">Goal Name: </label>
-            <input type="text" id="new-goal-name" name="new-goal-name">
+            <input type="text" id="new-goal-name" name="new-goal-name" value="Call Shemp">
           </div>
           <div class="form-group">
             <label for="goal-type">Goal Type: </label>
-            <input type="radio" id="type-P" name="goal-type" value="P"> Push
+            <input type="radio" id="type-P" name="goal-type" value="P" checked="checked"> Push
             <input type="radio" id="type-L" name="goal-type" value="L"> Limit
           </div>
           <div class="form-group">
             <label for="num-times">Amount to push for -or- limit to: </label>
-            <input type="number" id="num-times" name="num-times">
+            <input type="number" id="num-times" name="num-times" value="2">
           </div>
           <div class="form-group">
             <label for="duration">Duration: </label>
-            <input type="radio" id="dur-week" name="duration" value='1'> 1 Week 
+            <input type="radio" id="dur-week" name="duration" value='1' checked="checked"> 1 Week 
             <input type="radio" id="dur-month" name="duration" value='4'> 1 Month (4 weeks)
           </div>
           <div class="form-group">
             <label for="start-date">Start Date: </label>
-            <input type="text" id="start-date" name="start-date">
+            <input type="text" id="start-date" name="start-date" value="2017-12-06">
           </div>
             <!-- Check to Repeat:
             <input type="checkbox" id="repeat" name="repeat" value=True> -->
             <input type="submit" id="add-goal-submit" value="Add Goal to Spire">
         </form>
+        <br>
+        <br>
     </div>
     </div>
 
@@ -132,8 +134,7 @@
           <div class="friends" id="current-user-friends">
           {% for friend in user_friends %}
              <!-- <form action="/user/<username>/GoalShare-<friend_name>" method="GET"> -->
-             <li><button id="{{ friend.user_id }}" name="{{ friend.username }}"
-              class="btn btn-info active friend-btn" 
+             <li><button id="{{ friend.user_id }}" name="{{ friend.username }}" class="btn btn-info active friend-btn" 
               onclick="FriendShareInfo(this)">{{ friend.username }}
               </button>
              </li>
@@ -152,7 +153,7 @@
         <form id="add-friend-form">
           <div class="form-group">
             <label class="control-label" for="new-friend-name">Enter your friend's Username:</label>
-            <input class="form-control input-md" type="text" id="new-friend-name" name="new-friend-name">
+            <input class="form-control input-md" type="text" id="new-friend-name" name="new-friend-name" value="Curly">
             <br>
             <input type="submit" id="add-friend-submit" value="Add Friend">
           </div>
