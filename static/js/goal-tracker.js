@@ -113,7 +113,7 @@ function addCompResult(results) {
 
         $.get("/get-completions.json", {t_id: track_id}, function(results) {
         $("#curr-completions").text(results.count);
-        $("#comp-" + track_id).text(results.percent + "%");
+        $("#comp-" + track_id).text(Number(results.percent).toFixed(0) + "%");
     })
     }
 
@@ -169,7 +169,7 @@ function addFriendResult(results) {
 
         newLine.append(newButton);
 
-        $("#user-friends").append(newLine);
+        $("#current-user-friends").append(newLine);
     }
     else if (results["add"] == false) {
         alert("You are already friends with " + results.name + ".");

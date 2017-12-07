@@ -331,6 +331,12 @@ def example_data():
                     comp_time='06:30',
                     comp_notes='Too early!')
 
+    c5 = Completion(track_id=2,
+                    comp_date='2017-12-6',
+                    comp_location='Favorite Diner',
+                    comp_time='09:30',
+                    comp_notes='Broke my limit!')
+
     hf1 = High_Five(comp_id=1,
                     hfiver_id=1,
                     hfive_date='2017-11-19 11:00')
@@ -348,7 +354,7 @@ def example_data():
     db.session.commit()
     # import pdb; pdb.set_trace()
 
-    db.session.add_all([c1,c2,c3,c4])
+    db.session.add_all([c1,c2,c3,c4,c5])
     db.session.commit()
 
     db.session.add_all([hf1])

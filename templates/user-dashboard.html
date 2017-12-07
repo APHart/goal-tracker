@@ -32,6 +32,7 @@
            <br>  
           {% endfor %}
         </div>
+      </ul>
     {% else %}
         <h2>You do not have any current goals.</h2>
     {% endif %}
@@ -55,13 +56,13 @@
               <input id="track-id" type="hidden">
               <div class="form-group">
                 <label for="comp-date">Date</label>
-                <input id="comp-date" type="text" name="comp-date" required> *
+                <input id="comp-date" type="text" name="comp-date" value="2017-12-06" required> *
               </div>
                 <!-- How many times? <input id="comp-times" type="number" name="comp-times" required> -->
               <!-- <br> -->
               <div class="form-group">
                 <label for="comp-loc">Location</label>
-                <input id="comp-loc" type="text" name="comp-loc">
+                <input id="comp-loc" type="text" name="comp-loc" value="Dumbells Athletic Club">
               </div>
               <div class="form-group">
                 <label for="comp-time">Time</label>
@@ -128,10 +129,10 @@
     <div>
       <h2>Your Goal.spirE Friends:</h2>
       <div id="user-friends">
-      {% if user_friends %}
         <!-- Create button for user's current goal tracks by goal name -->
         <ul style="list-style: none">
           <div class="friends" id="current-user-friends">
+          {% if user_friends %}
           {% for friend in user_friends %}
              <!-- <form action="/user/<username>/GoalShare-<friend_name>" method="GET"> -->
              <li><button id="{{ friend.user_id }}" name="{{ friend.username }}" class="btn btn-info active friend-btn" 
@@ -141,10 +142,13 @@
            <!-- </form> -->
            <br>  
           {% endfor %}
-        </div>
-    {% else %}
-        <h2>You have not added any friends.</h2>
-    {% endif %}
+          </div>
+        </ul>
+        {% else %}
+          </div>
+          </ul>
+          <h2>You have not added any friends.</h2>
+          {% endif %}
     </div>
         <!-- Add a Friend Form -->
     <div >
