@@ -85,7 +85,6 @@ def register_process():
         return redirect("/login")
     else:
         new_user = User(email=email, username=username, password=password)
-        #user_id = new_user.user_id
         db.session.add(new_user)
         db.session.commit()
         session['user_id'] = new_user.user_id
@@ -115,9 +114,7 @@ def login_process():
 
     elif user and user.password == password:
         session['user_id'] = user.user_id
-        # flash('You have successfully logged in...woohoo!')
-        # url = "/user/" + str(user.username)
-        # return redirect("/user/<username>")
+
         return redirect(url_for("user_dashboard", username=user.username))
     
 
@@ -151,16 +148,12 @@ def user_dashboard(username):
             track.percent_comp = completion_percentage(track.track_id)
             track.length = length
             current_tracks.append(track)
-            # print track.duration.lower
-            # print track.duration.upper
-            # print track.duration.length.days
-            # print type(track.duration.length.days)
 
     return render_template("user-dashboard.html",
                            user=user, current_tracks=current_tracks,
                            user_friends=friends)
 
-@app.route("/friend-share-info", methods=['POST'])
+@app.route("/friend-share-info.json", methods=['POST'])
 def friend_share_info():
     """Get user friend info for friend share page url."""
 
@@ -267,7 +260,6 @@ def add_goal():
     added_goal = Goal.query.filter(Goal.user_id == user_id , 
                                    Goal.name == name).first()
 
-
     new_track = Track(goal_id=added_goal.goal_id,
                duration='[' + start_date + ',' + end_date + ']',
                num_times=num_times)
@@ -275,16 +267,19 @@ def add_goal():
     db.session.add(new_track)
     db.session.commit()
 
+    # Get/assign completion percentage and track length for new goal/track
+    percent_comp = completion_percentage(new_track.track_id)
+
+    if duration == 6:
+        new_track.length = "week"
+    elif duration == 24:
+        new_track.length = "month"
+
+    # Determine whether the new goal is "current" and will need to be
+    # dynamically added to user dashboard as goal button
     today = date.today()
     if today in new_track.duration:
         add_button = True
-
-        percent_comp = completion_percentage(new_track.track_id)
-
-        if duration == 6:
-            new_track.length = "week"
-        elif duration == 24:
-            new_track.length = "month"
 
     else:
         add_button = False
@@ -414,7 +409,7 @@ def add_friend():
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = False
+    app.debug = True
     app.jinja_env.auto_reload = app.debug  # make sure templates, etc. are not cached in debug mode
 
     connect_to_db(app)

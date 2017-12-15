@@ -18,7 +18,7 @@
           {% for track in current_tracks %}
 
              <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
-              class="btn btn-info active goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}" data-length="{{ track.length }}" data-target="#goalModal">
+              class="btn btn-info goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}"data-length="{{ track.length }}" data-target="#goalModal">
               {{ track.goal.name }} {{ track.num_times }}
                 time(s) this {{ track.length }}
               {% if track.goal.type_id == 'L' %}
@@ -56,13 +56,13 @@
               <input id="track-id" type="hidden">
               <div class="form-group">
                 <label for="comp-date">Date</label>
-                <input id="comp-date" type="text" name="comp-date" value="2017-12-06" required> *
+                <input id="comp-date" type="text" name="comp-date" required> *
               </div>
                 <!-- How many times? <input id="comp-times" type="number" name="comp-times" required> -->
               <!-- <br> -->
               <div class="form-group">
                 <label for="comp-loc">Location</label>
-                <input id="comp-loc" type="text" name="comp-loc" value="Dumbells Athletic Club">
+                <input id="comp-loc" type="text" name="comp-loc">
               </div>
               <div class="form-group">
                 <label for="comp-time">Time</label>
@@ -95,25 +95,25 @@
         <form id="add-goal-form">
           <div class="form-group">
             <label for="new-goal-name">Goal Name: </label>
-            <input type="text" id="new-goal-name" name="new-goal-name" value="Call Shemp">
+            <input type="text" id="new-goal-name" name="new-goal-name">
           </div>
           <div class="form-group">
             <label for="goal-type">Goal Type: </label>
-            <input type="radio" id="type-P" name="goal-type" value="P" checked="checked"> Push
+            <input type="radio" id="type-P" name="goal-type" value="P"> Push
             <input type="radio" id="type-L" name="goal-type" value="L"> Limit
           </div>
           <div class="form-group">
             <label for="num-times">Amount to push for -or- limit to: </label>
-            <input type="number" id="num-times" name="num-times" value="2">
+            <input type="number" id="num-times" name="num-times">
           </div>
           <div class="form-group">
             <label for="duration">Duration: </label>
-            <input type="radio" id="dur-week" name="duration" value='1' checked="checked"> 1 Week 
+            <input type="radio" id="dur-week" name="duration" value='1'> 1 Week 
             <input type="radio" id="dur-month" name="duration" value='4'> 1 Month (4 weeks)
           </div>
           <div class="form-group">
             <label for="start-date">Start Date: </label>
-            <input type="text" id="start-date" name="start-date" value="2017-12-06">
+            <input type="text" id="start-date" name="start-date">
           </div>
             <!-- Check to Repeat:
             <input type="checkbox" id="repeat" name="repeat" value=True> -->
@@ -157,7 +157,7 @@
         <form id="add-friend-form">
           <div class="form-group">
             <label class="control-label" for="new-friend-name">Enter your friend's Username:</label>
-            <input class="form-control input-md" type="text" id="new-friend-name" name="new-friend-name" value="Curly">
+            <input class="form-control input-md" type="text" id="new-friend-name" name="new-friend-name">
             <br>
             <input type="submit" id="add-friend-submit" value="Add Friend">
           </div>

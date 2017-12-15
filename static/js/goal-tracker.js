@@ -28,7 +28,7 @@ function addGoalResult(results) {
         let newButton = $("<button></button>");
         newButton.attr("id", results.id);
         newButton.attr("name", results.name);
-        newButton.attr("class", "btn btn-info active goal-btn");
+        newButton.attr("class", "btn btn-info goal-btn");
         newButton.attr("data-duration", results.duration);
         newButton.attr("data-num-times", results.num_times);
         newButton.attr("data-goal-type", results.type);
@@ -47,7 +47,7 @@ function addGoalResult(results) {
         
         let newSpan = $("<span>");
         newSpan.attr("class", "comp-p");
-        newSpan.text(" " + results.percent_comp + " %");
+        newSpan.text(" " + results.percent_comp + " % complete");
 
         newLine.append(newButton, newSpan);
         $("#current-tracks").append(newLine);
@@ -82,11 +82,13 @@ $("#add-goal-form").on("submit", addGoal);
 
 //Show modal when goal/track button is clicked.
 function showModal(evt) {
+    $(this).addClass("active")
+
     let goalName = $(this).text();
     let num = $(this).data("num-times");
-    if ($(this).data("goal-type") == "P") {
+    // if ($(this).data("goal-type") == "P") {
         
-    };
+    // };
 
     $("#goal-name").text(goalName);
 
@@ -116,11 +118,9 @@ function addCompResult(results) {
         $("#comp-" + track_id).text(Number(results.percent).toFixed(0) + "%");
     })
     }
-
     else if (results == "Fail") {
         alert("The completion date entered is not in the date range of the goal.");
     }
-
 }
 
 //Ajax request to add new completion data for user goal track
@@ -136,7 +136,6 @@ function addCompletion(evt) {
     };
 
     $.post("/add-completion.json", formValues, addCompResult);
-
 }
 
 $("#new-comp-submit").on("click", addCompletion);
@@ -186,10 +185,7 @@ function FriendShareInfo($this) {
         "friend_id": friend_id,
     };
 
-    // debugger;
-
-    $.post("/friend-share-info", data, function (results) {
-        console.log("returned");
+    $.post("/friend-share-info.json", data, function (results) {
         let username = results.username;
         let friend_name = results.friend_name;
         window.location.replace("/user/" + username + "/GoalShare-" + friend_name);
@@ -198,13 +194,9 @@ function FriendShareInfo($this) {
 
 window.FriendShareInfo = FriendShareInfo;
 
-
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
 });
 
-function audrey() {
-    console.log("Hellooo");
-}
