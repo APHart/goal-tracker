@@ -8,6 +8,7 @@
   <div class="main-container" class="container-fluid">
     <div class="row">
     <div id="goals-column" class="col-xs-12 col-md-8 col-lg-8 goal-column">
+    
     <!-- Current User Goal Tracks -->
     <div id="current-goals">
     {% if current_tracks %}
@@ -16,7 +17,6 @@
         <ul style="list-style: none">
           <div class="current-tracks" id="current-tracks">
           {% for track in current_tracks %}
-
              <li><button id="{{ track.track_id }}" name="{{ track.goal.name }}" 
               class="btn btn-info goal-btn" data-duration="{{ track.duration}}" data-num-times="{{ track.num_times }}" data-goal-type="{{ track.goal.type_id }}" data-t-id="{{ track.track_id }}"data-length="{{ track.length }}" data-target="#goalModal">
               {{ track.goal.name }} {{ track.num_times }}
@@ -27,7 +27,9 @@
                 <a class="type-tip" data-toggle="tooltip" title="Push: a goal for increasing an activity by setting how many times you are striving for in the chosen duration." data-placement="right">(Push)</a> 
               {% endif %}
               </button>
-              <span class="comp-p" id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}% complete</span>
+              <span class="comp-p" id="comp-{{track.track_id}}">{{ "%0.0f" | format(track.percent_comp|float) }}% complete
+                <canvas id="chart-{{ track.track_id }}" class="comp-chart" data-t-id="{{ track.track_id }}"></canvas>
+              </span>
              </li>
            <br>  
           {% endfor %}
@@ -58,8 +60,6 @@
                 <label for="comp-date">Date</label>
                 <input id="comp-date" type="text" name="comp-date" required> *
               </div>
-                <!-- How many times? <input id="comp-times" type="number" name="comp-times" required> -->
-              <!-- <br> -->
               <div class="form-group">
                 <label for="comp-loc">Location</label>
                 <input id="comp-loc" type="text" name="comp-loc">

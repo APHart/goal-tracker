@@ -3,7 +3,7 @@
 
 $(document).ready(function() {
 
-//Sets previous goals as autocomplete data for new goal field.
+// Sets previous goals as autocomplete data for new goal field.
 function autoCompleteList(){
     $.get("/get-goals.json", function(results) {
         $("#new-goal-name").autocomplete({
@@ -13,14 +13,20 @@ function autoCompleteList(){
 }
 autoCompleteList();
 
-//Inserts jquery datepicker for start date field.
+// Inserts jquery datepicker for start date field.
 $(function insertDatePicker() {
     $("#start-date").datepicker({dateFormat: 'yy-mm-dd' });
     $("#comp-date").datepicker({dateFormat: 'yy-mm-dd' });
 
 });
 
-//When new goal is added, adds new goal to autocomplete list.
+// Create chart.js for current goal/track(s) completion %
+function getCurrentGoalCharts() {
+    console.log("Called the js function from HTML");
+}
+getCurrentGoalCharts();
+
+// When new goal is added, adds new goal to autocomplete list.
 function addGoalResult(results) {
 
     if (results["add"] == true) {
@@ -62,7 +68,7 @@ function addGoalResult(results) {
     }
 }
 
-//Ajax post request for adding a new goal from new_goal_form.
+// Ajax post request for adding a new goal from new_goal_form.
 function addGoal(evt) {
     evt.preventDefault();
 
@@ -80,7 +86,7 @@ function addGoal(evt) {
 
 $("#add-goal-form").on("submit", addGoal);
 
-//Show modal when goal/track button is clicked.
+// Show modal when goal/track button is clicked.
 function showModal(evt) {
     $(this).addClass("active")
 
@@ -105,7 +111,7 @@ function showModal(evt) {
 
 $(document).on("click", ".goal-btn", showModal);
 
-//Show result of adding completion info
+// Show result of adding completion info
 function addCompResult(results) {
     if (results == "Success") {
         let track_id = $("#track-id").val()
@@ -123,7 +129,7 @@ function addCompResult(results) {
     }
 }
 
-//Ajax request to add new completion data for user goal track
+// Ajax request to add new completion data for user goal track
 function addCompletion(evt) {
     evt.preventDefault();
 
@@ -140,9 +146,9 @@ function addCompletion(evt) {
 
 $("#new-comp-submit").on("click", addCompletion);
 
-//Ajax request to add a friend 
-//(currently must be registered user and no permission needed)
-//will update in the future to allow email invites and permissions required
+// Ajax request to add a friend 
+// (currently must be registered user and no permission needed)
+// will update in the future to allow email invites and permissions required
 function addFriend(evt) {
     evt.preventDefault();
 
